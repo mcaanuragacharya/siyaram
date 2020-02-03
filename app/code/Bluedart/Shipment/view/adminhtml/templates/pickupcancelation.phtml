@@ -1,0 +1,114 @@
+	<script type="text/javascript" src="<?php echo $block->getViewFileUrl('Bluedart_Shipment::js/jquery.validate.min.js'); ?>"></script>
+<script type="text/javascript">
+  jQuery.noConflict();
+  jQuery(document).ready(function() {
+   jQuery.validator.addMethod("allsymbol", function(value, element) {
+    return this.optional(element) || /^[a-zA-Z0-9\,\.\/?;:\'\\\~\!\@\"\#\$\%\^\&\*\(\)\[\]\+\=\_ \/\-]+$/i.test(value);
+  }, "Please enter valid alphabets or number only.");
+
+  jQuery("#bluedart_shipment").validate({
+        rules: {
+         token_no:{number:true},
+         remarks : {allsymbol:true},
+      },
+    });
+  });
+
+  jQuery.validator.setDefaults({
+    submitHandler: function() {
+      jQuery('#ajax-loader').show();
+      var reg_date = jQuery('#reg_date').val();
+      var token_no = jQuery('#token_no').val();
+      var remarks = jQuery('#remarks').val();
+      jQuery.ajax({
+        type: "POST",
+        url: "<?php echo $this->getUrl('shipment/index/pickupcancelationvalidate'); ?>",
+        data: { 'reg_date' : reg_date , 'token_no' : token_no , 'remarks' : remarks },
+        success: function(data){
+          if(data != ''){
+              jQuery('#ajax-loader').hide();
+              jQuery('#waybillvalidmessage').html(data);
+          }
+        }
+      });
+    }
+  });
+  function resetForm() {
+    jQuery('#waybillvalidmessage').html('');
+    jQuery("#bluedart_shipment").validate().resetForm();
+  }
+  /*function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+  } */
+</script>
+
+<style type="text/css">
+#bluedart_shipment_creation{display:block;float:left;width:97%;margin-top:0;}
+#bluedart_shipment_creation input,select{float:left;margin:2px 5px 2px 5px;width:150px}
+#bluedart_shipment label{width:160px !important;}
+#bluedart_shipment label.error{width:65% !important;margin-left:0;padding-left:0;float:right;}
+#bluedart_shipment_creation h3{margin-bottom:20px;}
+.bluedart_shipment_creation_fieldset{min-height:0;margin-right: 10px;width:95%;}
+#bluedart_shipment label{line-height:25px;padding-left:5px;}
+#bluedart_shipment_creation .checkbox{overflow:auto;border:1px solid #d6d6d6;width:89%;margin:4% 0 5px;padding: 5px 0;}
+#bluedart_shipment_creation .go_button{margin-left:7px;}
+#bluedart_shipment_creation .textwidth{width: 270px;}
+#bluedart_shipment_creation .checkbox span{margin:2px 24px 3px 0;}
+.divTable{display:table;background-color:#eee;border:1px solid #666;border-spacing:5px;margin:10px 0 0;width:50%}
+.divRow{display:table-row;width:auto}
+.divCell{float:left;display:table-column;background-color:#ccc}
+.pincodes{width:100%}.pincodes p span{float:left;display:block}
+.pincodes p{overflow:auto;margin:0;padding:0 5px}
+.pincodes p span{width:50%;text-align:left;margin:5px 0}
+.pincodes p:nth-child(odd){background:#FEFEFE}
+.pincodes p:nth-child(even){background:#CDE0F1}
+.pincodes p:first-child{background:#0F6FC6;color:#fff}
+.pincodes span.error_msg{font-weight:700;color:#D40707}
+/*#reg_date{background: url("<?php //echo $this->getViewFileUrl('Bluedart_Shipment::images/img.gif'); ?>") no-repeat right center;border:1px solid #aaa;height:26px;border-radius:1px;cursor:pointer;width: 11%;}*/
+</style>
+<div id="bluedart_shipment_creation">
+<form name="pickupcancelation" id="bluedart_shipment" novalidate="novalidate">
+<h3>Cancel Pickup :</h3>
+      <FIELDSET class="bluedart_shipment_creation_fieldset">
+      <legend>Demographic Details</legend>
+      <label>Pickup Registration Date <span class="required">*</span></label>
+      <input type="text" class="required" id="reg_date" name="reg_date" maxlength="10"/>
+      <br><br>
+      <label>Token No<span class="required">*</span></label><input type="text" maxlength="8" class="required" id="token_no" name="token_no" />
+    </FIELDSET>
+    <FIELDSET class="bluedart_shipment_creation_fieldset">
+      <legend>Remarks</legend>
+      <label>Remarks</label><input type="text" class="textwidth" id="remarks" name="remarks" maxlength="60" />
+    </FIELDSET>
+
+    <button type="submit" class="go_button">Cancel Pickup</button>
+    <button class="go_button" type="button" onclick="reset();resetForm();">Reset</button>
+    <div id="ajax-loader" style="display:none">
+      <img src="<?php echo $this->getViewFileUrl('Bluedart_Shipment::images/ajax-loader.gif'); ?>">
+    </div>
+  <div id = "waybillvalidmessage" class = "waybillvalidmessage"></div>
+</form>
+</div>
+<!-- <script type="text/javascript">
+ Calendar.setup({
+  inputField : 'reg_date',
+  ifFormat : '%Y-%m-%d',
+  singleClick : true     
+  });
+</script> -->
+<script>
+  require([
+      "jquery",
+      "mage/calendar"
+  ], function($){
+     $("#reg_date").calendar({
+        buttonText:"Select",
+        dateFormat: "Y-M-dd",
+        closeText: "Done",
+        selectOtherMonths: true
+     });
+  });
+</script>

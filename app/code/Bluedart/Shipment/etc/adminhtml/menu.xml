@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+	    <add id="Bluedart_Shipment::shipment" title="Blue Dart" module="Bluedart_Shipment" sortOrder="50" resource="Bluedart_Shipment::shipment"/>
+
+		<add id="Bluedart_Shipment::pincodefinder" title="Pincode Finder" module="Bluedart_Shipment" sortOrder="0" action="shipment/index/pincodefinder" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::pincodefinder"/>
+
+		<add id="Bluedart_Shipment::shipmenttransit" title="Transit Time Finder" module="Bluedart_Shipment" sortOrder="1" action="shipment/index/shipmenttransit" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::shipmenttransit"/>
+
+		<add id="Bluedart_Shipment::waybillcancelation" title="Waybill Cancellation" module="Bluedart_Shipment" sortOrder="2" action="shipment/index/waybillcancelation" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::waybillcancelation"/>
+
+		<add id="Bluedart_Shipment::pickupregistration" title="Pickup Registration" module="Bluedart_Shipment" sortOrder="3" action="shipment/index/pickupregistration" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::pickupregistration"/>
+
+		<add id="Bluedart_Shipment::pickupcancelation" title="Pickup Cancellation" module="Bluedart_Shipment" sortOrder="4" action="shipment/index/pickupcancelation" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::pickupcancelation"/>
+
+		<add id="Bluedart_Shipment::shipmenttrack" title="Shipment Tracking" module="Bluedart_Shipment" sortOrder="5" action="shipment/index/shipmenttrack" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::shipmenttrack"/>
+
+		<!-- <add id="Bluedart_Shipment::waybillmassimport" title="Mass Waybill Generation" module="Bluedart_Shipment" sortOrder="6" action="shipment/index/waybillmassimport" parent="Bluedart_Shipment::shipment" resource="Bluedart_Shipment::waybillmassimport"/> -->
+	</menu>
+</config>

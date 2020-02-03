@@ -1,0 +1,207 @@
+<!--
+/**
+ * Purpletree_Rma return_order_initiate
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<div data-role="spinner" class="pts-front-loader" style="position: fixed;display:none;">
+</div>
+<form name="initiateReturn1-form" class="form initiateReturn" action="<?php echo $this->getUrl('*/*/save') ?>" id="initiateReturn1-form" method="post" data-mage-init='{"validation": {}}' autocomplete="off" enctype="multipart/form-data" >
+    <fieldset class="fieldset">
+        <div class="field note no-label"><?php echo __('Enter all details.') ?></div>
+		<!--Package Condition-->
+		<div class="field package_condition">
+			<label class="label" for="package_condition"><span><?php echo __('Package Condition') ?></span></label>
+			<div class="control">
+				<select name="package_condition" id="package_condition" title="package_condition">
+					<?php  foreach($this->listPackageConditions() as $package_condition) { ?>
+					 <option value="<?php echo $package_condition['value'] ?>"><?php echo $package_condition['label']; ?></option>
+					<?php }  ?>
+				</select> 
+			</div>
+		</div>
+		<!--Package Condition-->
+		<!--Reason-->
+		<div class="field reason">
+			<label class="label" for="reason"><span><?php echo __('Reason') ?></span></label>
+			<div class="control">
+				<select name="reason" id="reason" title="package_condition">
+					<?php  foreach($this->listReasons() as $reason) { ?>
+					 <option value="<?php echo $reason['value'] ?>"><?php echo $reason['label']; ?></option>
+					<?php } ?>
+				</select> 
+			</div>
+		</div>
+		<!--Reason-->
+		<!--Message-->
+		<div class="field orderreturn_message required">
+            <label class="label" for="orderreturn_message"><span><?php echo __('Add Message') ?></span></label>
+            <div class="control">
+               <textarea required name="orderreturn_message" id="orderreturn_message" title="<?php echo __('Message') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+
+            </div>
+        </div>
+		<!--Message-->
+		<!--Attachment-->
+		<div class="field orderreturn_message_attachment">
+            <label class="label" for="orderreturn_message_attachment"><span><?php echo __('Attachment') ?></span></label>
+            <div class="control">
+                <input name="pts_orderreturn_message_attachment" id="orderreturn_message_attachment" title="<?php echo __('Attachment') ?>" class="input-text" type="file">
+				<p><?php echo __('Note - File types allowed are pdf, doc, docx, xls, xlsx, csv, txt, jpg, jpeg, png, gif') ?></p>
+            </div>
+        </div>
+		<!--Attachment-->
+            </fieldset>
+	<!--Products-->
+	<?php if(!empty($this->getProducts())) { ?>
+		<div class="cart table-wrapper">
+       <table id="shopping-cart-table" class="cart items data table">
+            <thead>
+                <tr>
+                       <th class="col item" scope="col"><span><?php echo __('Select') ?></span></th>
+                    <th class="col item" scope="col"><span><?php echo __('Item') ?></span></th>
+                    <th class="col price" scope="col"><span><?php echo __('Price') ?></span></th>
+                    <th class="col qty" scope="col"><span><?php echo __('Returned Quantity') ?></span></th>
+                    <th class="col subtotal" scope="col"><span><?php echo __('Subtotal') ?></span></th>
+                </tr>
+            </thead>
+	<?php foreach($this->getProducts() as $item) { ?>
+	<?php $_product = $this->loadproduct($item->getProductId()); ?>
+			<tbody class="cart item">
+				<tr class="item-info">
+					<td data-th="SelectItem" class="col SelectptsItem">
+					<input class="required-entry" checked="checked" id="selected-<?php echo $item->getSku(); ?>" type="checkbox" name="selected_product[]" value="<?php echo $item->getProductId(); ?>">
+					</td>
+					<td data-th="Item" class="col item">
+						<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $item->getName(); ?>" tabindex="-1" class="product-item-photo">
+							<span class="product-image-container pts-img-conta">
+								<span class="product-image-wrapper">
+									<img class="product-image-photo" src="<?php echo $this->getproductimg($_product->getThumbnail()); ?>" alt="<?php echo $item->getName(); ?>" width="120" height="120"></span>
+							</span>
+						</a>
+						<div class="product-item-details">
+							<strong class="product-item-name">
+								<a href="<?php echo $_product->getProductUrl() ?>"><?php echo $item->getName(); ?></a>
+							</strong>
+							<?php 
+							$options = $item->getProductOptions();
+							if(is_array($options) && isset($options['attributes_info']) && !empty($options['attributes_info'])):  ?>
+							<dl class="item-options">
+							<?php foreach($options['attributes_info'] as $attribs): ?>
+								<dt><?php echo $attribs['label'] ?></dt>
+								<dd><?php echo $attribs['value'] ?></dd>
+								<?php endforeach; ?>
+							</dl>
+							<?php endif; ?>
+						</div>
+					</td>
+					<td class="col price" data-th="Price">
+						 <span class="price-excluding-tax" data-label="Excl. Tax">
+								<span class="cart-price">
+									<span class="price"><?php echo $this->convertToCurrency($item->getPrice()); ?></span>           
+								 </span>
+						</span>
+					</td>
+					<td class="col qty" data-th="Qty">
+						<div class="field qty">
+							<label class="label" for="cart-<?php echo $item->getProductId(); ?>-qty">
+								<span><?php echo __('Qty') ?></span>
+							</label>
+							<div class="control qty">
+								<input min="1" max="<?php echo $item->getQtyOrdered()*1 ?>" id="cart-<?php echo $item->getProductId(); ?>-qty" name="prodqty[<?php echo $item->getProductId(); ?>]" value="<?php /* @escapeNotVerified */ echo $item->getQtyOrdered()*1 ?>" size="4" title="Qty" class="input-text qty" maxlength="12" data-validate="{required:true,'validate-greater-than-zero':true}" type="number">
+							</div>
+						</div>
+					</td>
+					<td class="col subtotal" data-th="Subtotal">
+						<span class="price-excluding-tax" data-label="Excl. Tax">
+								<span class="cart-price">
+									<span class="price"><?php echo $this->convertToCurrency($item->getPrice()*$item->getQtyOrdered()); ?></span>           
+								</span>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		
+	<?php } ?>
+	</table>
+     </div>
+	<?php } ?>
+	<!--Products-->
+	<div class="pts-terms-checkbox">
+		<input required class="required-entry" data-validate="{required:true}" id="terms_page" type="checkbox" name="terms_page"/>
+		<?php $url = $this->getUrl('rma/index/terms'); ?>
+		<label for="terms_page">
+	<?php echo __('Click here to indicate that you have read and agree to the terms presented in the '); ?>
+	<a target="_blank" href="<?php echo $url; ?>"><?php echo __('Terms and Conditions agreement'); ?></a>
+		</label>
+	</div>
+	     <div class="actions-toolbar">
+        <div class="primary">
+            <input name="order_id" type="hidden" value="<?php echo $this->getOrderId(); ?>"/>
+            <button id="savedata" type="submit" title="Submit" class="action submit primary">
+                <span><?php echo __('Submit') ?></span>
+            </button>
+        </div>
+    </div>
+</form>
+<script type="text/x-magento-init">
+    {
+        "#initiateReturn-form1": {
+            "validation": {}
+        }
+    }
+</script>
+<script type="text/javascript">
+require([
+    'jquery',
+    'mage/mage'
+], function($){
+    var dataForm = $('#initiateReturn-form1');
+   dataForm.mage('validation', {});
+
+});
+require(['jquery'], function($) { 
+
+	$(document).ready(function($) {
+		$("#savedata").click(function() {
+			 if ($('#initiateReturn-form1').valid()) {
+				$('.pts-front-loader').css('display','block');
+			 }
+		});
+	});
+});
+
+require(['jquery','mage/adminhtml/wysiwyg/tiny_mce/setup'], function(jQuery) {
+	jQuery(document).ready(function(jQuery) {
+	tinyMCE.init({
+    mode : "exact",
+    elements: "orderreturn_message",
+    theme : "advanced",
+    plugins : "inlinepopups,style,layer,table,save,advhr,advlink,emotions,iespell,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
+    theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+    theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,advhr,|,print,|,ltr,rtl,|,fullscreen",
+    theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,|,visualchars,nonbreaking",
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    theme_advanced_path_location : "bottom",
+    extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
+    theme_advanced_resize_horizontal : 'true',
+    theme_advanced_resizing : 'true',
+    apply_source_formatting : 'true',
+    convert_urls : 'false',
+    force_br_newlines : 'true',
+    doctype : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+  });
+});
+});
+</script>

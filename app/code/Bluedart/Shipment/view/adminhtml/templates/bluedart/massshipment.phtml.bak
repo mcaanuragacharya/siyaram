@@ -1,0 +1,106 @@
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('Bluedart_Shipment::js/jquery.validate.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('Bluedart_Shipment::js/massshipment.js'); ?>"></script>
+
+<style type="text/css">
+    .bluedart_mass{ max-height: 600px; overflow-y: scroll;}
+    .hasDatepicker + .ui-datepicker-trigger{position: static;}
+    .bluedart_mass label .required{position: static;}
+    .bluedart_mass{ margin-top: 40px;}
+</style>
+<?php
+    $PickupDate = date("Y-m-d");
+    $PickupTime = date("Hi");
+    $CustomerEDD = date("Y-m-d");
+?>
+
+<div style="display:none; " class="popup popup-loading"></div>
+<p class="bluedart_url" style="display:none;"><?php echo $this->getUrl('shipment/index/massshipment'); ?></p>
+<div class="order_in_backgrounds" style="display:none;">
+    <div class="bluedart_mass">
+        <p><strong>Shipment Information </strong></p>
+        <form id="massshipmentform" name="massshipmentform" action="javascript:void(0);">
+            <div class="text_short">
+                <label>Product Code <span class="required">*</span></label><input style="width:30px; text-transform: uppercase;" maxlength="1" type="text" class="required alphabets" id="service_productcode" name="service_productcode" value="" onkeypress="return ValidateAlpha(event)"/>
+            </div>
+            <div class="text_short">
+                <label>Product Type</label>
+                <input class="radio" type="radio" name="dox" value="Docs" checked="checked"><span>Dox</span>
+                <input class="radio" type="radio" name="dox" value="Dutiables"><span>nDox</span>
+            </div>
+            <div class="text_short">
+                <label>Pack Type <span class="required">*</span></label><input style="width:30px" type="text" id="service_packtype" name="service_packtype" maxlength="1" class="required alphanumeric" onkeypress="return ValidateAlphaNumeric(event)"/>
+            </div>
+            <div class="text_short">
+                <label>Pickup Date <span class="required">*</span></label><input type="text" class="required" id="service_pickupdate" name="service_pickupdate" maxlength="10" value="<?php echo $PickupDate; ?>"/>
+            </div>
+            <div class="text_short">
+                <label>Pickup Ready Time <span class="required">*</span></label><input style="width:45px;" size="7" type="text" class="required number" id="service_pickupreadytime" name="service_pickupreadytime" value="<?php echo $PickupTime; ?>" maxlength="4" onkeypress="return isNumberKey(event)"/><span>&nbsp;&nbsp;Format 2359</span><br/>
+            </div>
+            <div class="text_short">
+                <label style="clear:both">RegisterPickup</label>
+                <input class="radio" type="radio" name="service_registerpickup" checked="checked" value="false"><span>No</span>
+                <input type="radio" class="radio" name="service_registerpickup" value="true"><span>Yes</span><br/>
+            </div>
+            <div class="text_short">
+                <label style="clear:both">IsForcePickup</label>
+                <input class="radio" type="radio" name="service_isforcepickup" checked="checked" value="false"><span>No</span>
+                <input type="radio" class="radio" name="service_isforcepickup" value="true"><span>Yes</span><br/>
+            </div>
+            <!-- <div class="text_short">
+                <label style="clear:both">IsDDN</label>
+                <input class="radio" type="radio" name="service_isDDN" checked="checked" value="false"><span>No</span>
+                <input type="radio" class="radio" name="service_isDDN" value="true"><span>Yes</span><br/>
+            </div> -->
+            <div class="text_short">
+                <label style="clear:both">PickupMode</label>
+                <input class="radio" type="radio" name="service_pickupmode" checked="checked" value="P"><span>P&nbsp;&nbsp;</span>
+                <input type="radio" class="radio" name="service_pickupmode" value="C"><span>C</span><br/>
+            </div>
+            <div class="text_short">
+                <label>PickupType</label>
+                <input style="width:100px" type="text" id="service_pickuptype" name="service_pickuptype" maxlength="15">
+            </div>
+            <div class="text_short">
+                <label>PreferredPickupTimeSlot</label>
+                <input style="width:100px" type="text" id="service_preferredpickuptimeslot" name="service_preferredpickuptimeslot">
+            </div>
+            <div class="text_short">
+                <label>CustomerEDD</label>
+                <input type="text" id="service_customerEDD" name="service_customerEDD" maxlength="10" value="<?php echo $CustomerEDD; ?>">
+            </div>
+            <div class="bluedart_clearer"></div>
+            <div class="bluedart_result"></div>
+            <div class="bluedart_clearer"></div>
+            <button id="bluedart_shipment_creation_submit_id" type="submit" class="primary" name="bluedart_shipment_creation_submit">Create Shipments</button>
+            <button class="bluedartclose primary" onclick="bluedartclose()" type="button">Close</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('.mass_bluedart_shipment').removeAttr('onclick');
+        $('.mass_bluedart_shipment').click(function () {
+            massBluedartShipment();
+        });
+    });
+
+    require([
+          "jquery",
+          "mage/calendar"
+        ], function($){
+        $("#service_pickupdate").calendar({
+            buttonText:"Select",
+            dateFormat: "YY-MM-dd",
+            closeText: "Done",
+            selectOtherMonths: true
+        });
+
+        $("#service_customerEDD").calendar({
+            buttonText:"Select",
+            dateFormat: "YY-MM-dd",
+            closeText: "Done",
+            selectOtherMonths: true
+        });
+    });
+</script>

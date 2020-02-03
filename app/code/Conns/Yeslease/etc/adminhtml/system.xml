@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright Conn's. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="progressive" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Progressive Payment Method</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="note" translate="label" type="textarea" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Note</label>
+                </field>
+				<field id="payment_icon" translate="label comment" type="image" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Payment icon</label>
+                    <backend_model>Conns\Yeslease\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">yeslease/image</upload_dir>
+                    <base_url type="media" scope_info="1">yeslease/image</base_url>
+                    <comment><![CDATA[Allowed file types: jpg, jpeg, gif, png, svg]]></comment>
+                </field>
+                <field id="amount_restriction" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Credit Payment Method Quote amount restriction</label>
+					<frontend_class>validate-number</frontend_class>
+                </field>
+                <field id="adjust_approval_amount" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Adjust Approval Amount (%)</label>
+					<frontend_class>validate-number</frontend_class>
+                </field>
+                <field id="Norder_status" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New order status</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                </field>
+                <field id="is_live" translate="label" type="select" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Is Live</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="live_api_url" translate="label" type="text" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Live Api Url</label>
+                </field>
+                <field id="live_api_username" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Live Username</label>
+                </field>
+                <field id="live_api_password" translate="label" type="password" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Live Password</label>
+                </field>
+                <field id="live_api_auth_header" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Live Auth Header</label>
+                </field>
+                <field id="live_encrypt_key" translate="label" type="text" sortOrder="28" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Live Encrypt Secret Key</label>
+                </field>
+                <field id="stage_api_url" translate="label" type="text" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stage Api Url</label>
+                </field>
+                <field id="stage_api_username" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stage  Username</label>
+                </field>
+                <field id="stage_api_password" translate="label" type="password" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stage Password</label>
+                </field>
+                <field id="stage_api_auth_header" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stage Auth Header</label>
+                </field>
+                <field id="stage_encrypt_key" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stage Encrypt Secret Key</label>
+                </field>
+                <field id="enable_logs" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Save Logs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

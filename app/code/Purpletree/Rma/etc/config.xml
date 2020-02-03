@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma config
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <purpletree_rma>
+            <general>
+                <enabled>0</enabled>
+				<process_data_field>To be Validated </process_data_field>
+				<day_completion>30</day_completion>
+				<defaultstatus>1</defaultstatus>
+				<defaultresolution>1</defaultresolution>
+            </general>
+            <email_configuration>
+				<emails_to_admin>1</emails_to_admin>
+				<email_id>sales</email_id>
+				<admin_emails>admin_initiate_email,admin_comment_email</admin_emails>
+				<emails_to_customer>1</emails_to_customer>
+				<customer_emails>customer_initiate_email,customer_status_change_email,customer_comment_email</customer_emails>
+            </email_configuration>
+            <order_status>
+				<pts_partial_return_initiated>pts_partial_return_initiated</pts_partial_return_initiated>
+				<pts_partial_return_completed>pts_partial_return_completed</pts_partial_return_completed>
+				<pts_full_return_initiated>pts_full_return_initiated</pts_full_return_initiated>
+				<pts_full_return_completed>pts_full_return_completed</pts_full_return_completed>
+            </order_status>
+            <smsapi>
+				<sms_enabled>0</sms_enabled>
+				<sms_rma_initiate>0</sms_rma_initiate>
+				<sms_rma_initiate_template>Hello _NAME_, Your request for order no. _ORDERID_ has been received. Track your request at _URL_</sms_rma_initiate_template>
+				<sms_status_changed>0</sms_status_changed>
+				<sms_rma_status_change_template>Hello _NAME_, Your request for order no. _ORDERID_ is _STATUS_. Track your request at _URL_</sms_rma_status_change_template>
+				<sms_rma_comment>0</sms_rma_comment>
+				<sms_rma_comment_template>Hello _NAME_, Your request for order no. _ORDERID_ has recieved message from admin. Track your request at _URL_</sms_rma_comment_template>
+            </smsapi>
+        </purpletree_rma>
+    </default>
+</config>
+

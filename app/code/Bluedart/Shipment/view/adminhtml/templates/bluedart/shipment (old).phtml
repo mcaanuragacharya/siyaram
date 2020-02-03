@@ -1,0 +1,897 @@
+<?php 
+$order_id = $this->getRequest()->getParam('order_id');
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$_order = $objectManager->create('Magento\Sales\Model\Order')->load($order_id);
+
+$invIncrementIDs = array();$InvoiceNo = '';
+if ($_order->hasInvoices()) {
+    foreach ($_order->getInvoiceCollection() as $inv) {
+        $invIncrementIDs[] = $inv->getIncrementId();   
+    } 
+}
+
+$billing 	= $_order->getBillingAddress();
+$shipping 	= $_order->getShippingAddress();
+$payment	= $_order->getPayment();
+$customerId = $_order->getCustomerId();
+$customer 	= $objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
+$countryCollection 	= $objectManager->create('Magento\Directory\Model\Config\Source\Country')->toOptionArray();
+
+//unset($_SESSION['bluedartItemsQty']);
+//echo "<pre>";print_r($_SESSION['bluedartItemsQty']);
+	//calculating total weight of current order
+	$totalWeight 	= 0;
+	$itemscount 	= 0;
+	$isShipped=false;
+	$itemsv = $_order->getAllVisibleItems();
+	foreach($itemsv as $itemvv){
+		if($itemvv->getWeight() != 0){
+			$weight =  $itemvv->getWeight()*$itemvv->getQtyOrdered();
+		} else {
+			$weight =  0.5*$itemvv->getQtyOrdered();
+		}
+		$totalWeight 	+= $weight;
+		if($itemvv->getQtyOrdered() > $itemvv->getQtyShipped()){
+			$itemscount += $itemvv->getQtyOrdered() - $itemvv->getQtyShipped();
+		} else if($itemvv->getQtyOrdered()==$itemvv->getQtyShipped()){
+			$isShipped=true;
+			$itemscount += $itemvv->getQtyOrdered();
+			//$itemscount = 0;
+		}
+	}
+	
+	$state = "";
+	if(($shipping->getData('region_id')) && ($shipping->getCountry() == 'US')){
+		$region = $objectManager->create('\Magento\Directory\Model\Region')->load($shipping->getData('region_id'));
+		$state = $region->getName();
+	}
+	else{
+		$state = $shipping->getData('region');
+	}
+
+	$billing_state = "";
+	if($shipping->getData('region_id')){
+		$region = $objectManager->create('\Magento\Directory\Model\Region')->load($shipping->getData('region_id'));
+		$billing_state = $region->getName();
+	}
+	else{
+		$billing_state = $shipping->getData('region');
+	}
+
+	$formSession=$objectManager->create('\Magento\Backend\Model\Session');
+	$formData = $formSession->getData('form_bluedartdata');//echo "<pre>";print_r($formData);//exit();
+	$session=false;
+	$urlInterface = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\UrlInterface');
+	$currentUrl = $urlInterface->getCurrentUrl();
+	$formSession->setPreviousUrl($currentUrl);
+
+	if(count($formData)>0){ $session=true; }
+	$scopeConfig = $objectManager->create('\Magento\Framework\App\Config\ScopeConfigInterface');
+	$storeScope  = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+	$OriginArea =   $scopeConfig->getValue('bluedart/settings/area',$storeScope);
+	$CustomerCode =   $scopeConfig->getValue('bluedart/settings/customercode',$storeScope);
+	$VendorCode =   $scopeConfig->getValue('bluedart/settings/client_vendorcode',$storeScope);
+	$CustomerName = $scopeConfig->getValue('bluedart/settings/client_name',$storeScope);
+	$CustomerEmailID = $scopeConfig->getValue('bluedart/settings/client_email',$storeScope);
+	$CustomerAddress1 = $scopeConfig->getValue('bluedart/settings/client_address1',$storeScope);
+	$CustomerAddress2 = $scopeConfig->getValue('bluedart/settings/client_address2',$storeScope);
+	$CustomerAddress3 = $scopeConfig->getValue('bluedart/settings/client_address3',$storeScope);	   
+	$CustomerPincode = $scopeConfig->getValue('bluedart/settings/client_pincode',$storeScope);
+	$CustomerMobile = $scopeConfig->getValue('bluedart/settings/client_mobile',$storeScope);
+	$CustomerTelephone =  $scopeConfig->getValue('bluedart/settings/client_telephone',$storeScope);
+	$CustomerLatitude = $scopeConfig->getValue('bluedart/settings/client_latitude',$storeScope);
+	$CustomerLongitude = $scopeConfig->getValue('bluedart/settings/client_longitude',$storeScope);
+	$CustomerAddressinfo =  $scopeConfig->getValue('bluedart/settings/client_addressinfo',$storeScope);
+
+	$CreditReferenceNo = $_order->getIncrementId();
+	$Length = '1';$Breadth = '1';$Height = '1';$IsToPayCustomer = '';$Sender = '';$ConsigneeName = '';$ConsigneeAddress1 = '';$ConsigneeAddress2 = '';$ConsigneeAddress3 = '';$ConsigneePincode = '';$ConsigneeTelephone = '';$ConsigneeMobile = '';$ProductCode = '';$SubProductCode = '';$ActualWeight = '';$PackType = '';$SpecialInstruction = '';$PickupDate = '';$PickupTime = '';$PDFOutputNotRequired = '';$DeclaredValue = '';$CollectableAmount = '';$ServiceWayBillNumber = '';$CommodityDetail1 = '';$CommodityDetail2 = '';$Commoditypid1 = '';$Commoditypid2 = '';$CommodityDetail3 = '';$Commoditypid3 = '';$Count = '';$ConsigneeEmailID = '';$ConsigneeLatitude = '';$ConsigneeLongitude = '';$ConsigneeAddressinfo = '';$ConsigneeCountryCode = '';$ConsigneeStateCode='';$AWBNo = ''; $RegisterPickup = ''; $DeliveryTimeSlot = ''; $IsForcePickup = ''; $ParcelShopCode = ''; $CustomerEDD = ''; $IsDDN = ''; $CreditReferenceNo2 = ''; $CreditReferenceNo3 = ''; $PickupMode = ''; $PickupType = ''; $ItemCount = ''; $IsPartialPickup = ''; $TotalCashPaytoCustomer = 0.0; $PreferredPickupTimeSlot = ''; $DeferredDeliveryDays = 0; $Officecutofftime = 1800;
+
+	//echo "<pre>";print_r($formData['Request']);exit;
+    if(isset($formData['Request'])){
+   	   $shipper = array();
+       $shipper = $formData['Request']['Shipper'];
+	   $CustomerAddress1 = $shipper['CustomerAddress1'];
+	   $CustomerAddress2 = $shipper['CustomerAddress2'];
+	   $CustomerAddress3 = $shipper['CustomerAddress3'];
+	   $CustomerCode = $shipper['CustomerCode'];
+	   $CustomerEmailID = $shipper['CustomerEmailID'];
+	   $CustomerMobile = $shipper['CustomerMobile'];
+	   $CustomerName = $shipper['CustomerName'];
+	   $CustomerPincode = $shipper['CustomerPincode'];
+	   $CustomerTelephone = $shipper['CustomerTelephone'];
+	   $IsToPayCustomer = $shipper['IsToPayCustomer'];
+	   $OriginArea = $shipper['OriginArea'];
+	   $Sender = $shipper['Sender'];
+	   $VendorCode = $shipper['VendorCode'];
+	   $CustomerLatitude = $shipper['CustomerLatitude'];
+	   $CustomerLongitude = $shipper['CustomerLongitude'];
+	   $CustomerAddressinfo = $shipper['CustomerAddressinfo'];
+
+	   $Consignee = array();
+       $Consignee = $formData['Request']['Consignee'];
+       $ConsigneeAddress1 = $Consignee['ConsigneeAddress1'];
+       $ConsigneeAddress2 = $Consignee['ConsigneeAddress2'];
+       $ConsigneeAddress3 = $Consignee['ConsigneeAddress3'];
+       $ConsigneeAttention = $Consignee['ConsigneeAttention'];
+       $ConsigneeMobile = $Consignee['ConsigneeMobile'];
+       $ConsigneeName = $Consignee['ConsigneeName'];
+       $ConsigneePincode = $Consignee['ConsigneePincode'];
+       $ConsigneeTelephone = $Consignee['ConsigneeTelephone'];
+       $ConsigneeEmailID = $Consignee['ConsigneeEmailID'];
+       $ConsigneeLatitude = $Consignee['ConsigneeLatitude'];
+       $ConsigneeLongitude = $Consignee['ConsigneeLongitude'];
+       $ConsigneeAddressinfo = $Consignee['ConsigneeAddressinfo'];
+       $ConsigneeCountryCode = $Consignee['ConsigneeCountryCode'];
+       $ConsigneeStateCode = $Consignee['ConsigneeStateCode'];
+       /*
+       if($street == ''){$street=($shipping) ? $shipping->getData('street'):'';}
+       if($city == ''){$city = ($shipping) ? $shipping->getData('city'):'';}
+       if($region == ''){$region = ($shipping) ? $shipping->getData('region'):'';}
+       if($ConsigneeName == ''){$ConsigneeName = ($shipping) ? $shipping->getData('firstname').' '.$shipping->getData('lastname'):'';}
+       if($ConsigneePincode == ''){$ConsigneePincode = ($shipping) ? $shipping->getData('postcode'):'';}
+       if($ConsigneeTelephone == ''){$ConsigneeTelephone = ($shipping) ? $shipping->getData('telephone'):'';}
+       */
+
+       $Services = array();
+       $Services = $formData['Request']['Services'];
+       $ActualWeight = $Services['ActualWeight'];
+       $CollectableAmount = $Services['CollectableAmount'];
+       $CommodityDetail1 = $Services['Commodity']['CommodityDetail1'];
+       $CommodityDetail2 = $Services['Commodity']['CommodityDetail2'];
+       $CommodityDetail3 = $Services['Commodity']['CommodityDetail3'];
+       $CreditReferenceNo = $Services['CreditReferenceNo'];
+       $DeclaredValue = $Services['DeclaredValue'];
+       $Breadth = $Services['Dimensions']['Dimension']['Breadth'];
+       $Count = $Services['Dimensions']['Dimension']['Count'];
+       $Height = $Services['Dimensions']['Dimension']['Height'];
+       $Length = $Services['Dimensions']['Dimension']['Length'];
+       $InvoiceNo = $Services['InvoiceNo'];
+       $PackType = $Services['PackType'];
+       $PickupDate = $Services['PickupDate'];
+       $PickupTime = $Services['PickupTime'];
+       //$PieceCount = $Services['PieceCount'];
+       $ProductCode = $Services['ProductCode'];
+       $ProductType = $Services['ProductType'];
+       //$PDFOutputNotRequired = $Services['PDFOutputNotRequired'];
+       $SpecialInstruction = $Services['SpecialInstruction'];
+       $SubProductCode = $Services['SubProductCode'];
+       //$ServiceWayBillNumber = $Services['ServiceWayBillNumber'];
+
+       $AWBNo = isset($Services[0]['AWBNo']) ? $Services[0]['AWBNo'] : '';
+       $RegisterPickup = $Services['RegisterPickup'];
+       $DeliveryTimeSlot = $Services['DeliveryTimeSlot'];
+       $IsForcePickup = $Services['IsForcePickup'];
+       $ParcelShopCode = $Services['ParcelShopCode'];
+       $CustomerEDD = $Services['CustomerEDD'];
+       //$IsDDN = $Services['IsDDN'];
+       $CreditReferenceNo2 = $Services['CreditReferenceNo2'];
+       $CreditReferenceNo3 = $Services['CreditReferenceNo3'];
+       $PickupMode = $Services['PickupMode'];
+       $PickupType = $Services['PickupType'];
+       $ItemCount = $Services['ItemCount'];
+       $IsPartialPickup = $Services['IsPartialPickup'];
+       $TotalCashPaytoCustomer = $Services['TotalCashPaytoCustomer'];
+       $PreferredPickupTimeSlot = $Services['PreferredPickupTimeSlot'];
+       $DeferredDeliveryDays = $Services['DeferredDeliveryDays'];
+       $Officecutofftime = $Services['Officecutofftime'];
+   }
+ ?>
+
+<!-- bluedart popup starts -->
+<div id="bluedart_overlay">
+	<div id="bluedart_shipment_creation">
+		<form id="bluedart_shipment" method="post" action="<?php echo $this->getUrl('shipment/index/shipment'); ?>" enctype="multipart/form-data">
+			<input type="hidden" name="bluedart_shipment_referer" value="<?php echo $currentUrl ?>" />
+			<input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+			<input name="bluedart_shipment_shipper_account" type="hidden" value="<?php echo $scopeConfig->getValue('bluedartsettings/settings/account_number',$storeScope); ?>" />
+			<input name="bluedart_shipment_original_reference" type="hidden" value="<?php echo $_order->getIncrementId() ?>" />
+
+			<h3 style="margin-bottom:20px;">Blue Dart Shipment :</h3>
+			<div id="bluedart_messages"></div>
+			<div class="bluedart_shipment_left" style="float:left;">
+			
+				<FIELDSET class="bluedart_shipment_creation_fieldset">
+					<legend>Shipper Details</legend>
+					<label>Area <span class="required">*</span></label><input style="width:60px" maxlength="3" type="text" class="required" id="shipper_area" name="shipper_area" value="<?php echo $OriginArea?>"/>
+					<label>Cust. code <span class="required">*</span></label><input style="width:60px" maxlength="6" type="text" class="required" id="shipper_customercode" name="shipper_customercode" value="<?php echo $CustomerCode;?>"/>
+					<label>ChkToPay</label>
+					<label class="combine"><input class="radio" type="checkbox" <?php if($IsToPayCustomer == 'true') {?> checked <?php }?> name="chktopay" value="chktopay">
+					</label><br/><br/>
+					<label>Client Name <span class="required">*</span></label><input style="width:160px" type="text" maxlength="30" class="required" id="shipper_clientname" name="shipper_clientname" value="<?php echo $CustomerName?>"/>
+					<label>Address <span class="required">*</span></label><input style="width:275px" type="text" id="shipper_address1" name="shipper_address1" value="<?php echo $CustomerAddress1;?>"/>
+					<label></label><input style="width:275px" type="text" id="shipper_address2" name="shipper_address2" value="<?php echo $CustomerAddress2;?>"/>
+					<label></label><input style="width:275px" type="text" id="shipper_address3" name="shipper_address3" value="<?php echo $CustomerAddress3;?>"/>
+					<label>Addressinfo</label><input style="width:275px" type="text" id="shipper_addressinfo" name="shipper_addressinfo" value="<?php echo $CustomerAddressinfo; ?>"/>
+					<label>Pincode <span class="required">*</span></label><input style="width:160px" maxlength="7" type="text" class="required" maxlength="6" id="shipper_pincode" name="shipper_pincode" value="<?php echo $CustomerPincode; ?>"/>
+					<label>Mobile</label><input style="width:160px" maxlength="15" type="text" id="shipper_mobile" name="shipper_mobile" value="<?php echo $CustomerMobile; ?>"/>
+					<label>Telephone</label><input style="width:160px" maxlength="15" type="text" id="shipper_telephone" name="shipper_telephone" value="<?php echo $CustomerTelephone; ?>"/>
+					<label>Sender</label><input style="width:160px" type="text" id="shipper_sender" name="shipper_sender" maxlength="20" value="<?php echo $CustomerName; ?>"/>
+					<label>Email</label><input style="width:160px" type="text" id="shipper_email" name="shipper_email" maxlength="30" value="<?php echo $CustomerEmailID; ?>"/>
+					<label>Vendor Code</label><input style="width:160px" type="text" id="shipper_vendorcode" name="shipper_vendorcode" maxlength="6" value="<?php echo $VendorCode; ?>"/>
+					<label>Latitude</label><input style="width:160px" type="text" id="shipper_latitude" name="shipper_latitude" value="<?php echo $CustomerLatitude; ?>"/>
+					<label>Longitude</label><input style="width:160px" type="text" id="shipper_longitude" name="shipper_longitude" value="<?php echo $CustomerLongitude; ?>"/>
+				</FIELDSET>
+
+				<FIELDSET class="bluedart_shipment_creation_fieldset">
+					<?php 
+						if($ConsigneeName == "")
+							$ConsigneeName = ($shipping) ? $shipping->getData('firstname').' '.$shipping->getData('lastname'):'';				
+						
+						$street=($shipping) ? $shipping->getData('street'):'';
+						//$street=($session)?$formData['bluedart_shipment_receiver_street']:$street;
+						
+						$street_length = strlen($street);	
+						$street_addr1 = substr($street, 0, 30); 
+						$street_addr2 = substr($street, 30, 30);
+						$street_addr3 = substr($street, 60, $street_length);
+
+						if($ConsigneeAddress1 == "") {
+							$ConsigneeAddress1 = $street_addr1;
+						}
+						
+						if($ConsigneeAddress2 == "") {
+							$ConsigneeAddress2 = $street_addr2;
+						}
+
+						if($ConsigneeAddress3 == "") {
+							$city = ($shipping) ? $shipping->getData('city'):'';				
+							$region = ($shipping) ? $shipping->getData('region'):'';
+							$ConsigneeAddress3 = $street_addr3.", ".$city . ", " .$region;
+						}
+
+						if($ConsigneeAddressinfo == '')
+							$ConsigneeAddressinfo = $ConsigneeAddress1 .' '. $ConsigneeAddress3;
+						
+						if($ConsigneeEmailID == '')
+							$ConsigneeEmailID = ($shipping) ? $shipping->getData('email') : '';
+
+						if($ConsigneeCountryCode == '')
+							$ConsigneeCountryCode = ($shipping) ? $shipping->getData('country_id') : '';
+
+						if($ConsigneeStateCode == '')
+							$ConsigneeStateCode = ($shipping) ? $shipping->getData('region_id') : '';
+
+						if($ConsigneePincode == "")
+							$ConsigneePincode = ($shipping) ? $shipping->getData('postcode'):'';
+
+						if($ConsigneeTelephone == "")
+							$ConsigneeTelephone = ($shipping) ? $shipping->getData('telephone'):'';
+						
+					?>
+
+					<legend>Consignee Details</legend>
+					<label>Consignee Name <span class="required">*</span></label><input style="width:160px" type="text" maxlength="30" id="consignee_name" name="consignee_name" value="<?php echo $ConsigneeName;?>"/>
+					<label>Address <span class="required">*</span></label><input style="width:275px" type="text" id="consignee_adress1" name="consignee_adress1" value="<?php echo $ConsigneeAddress1;?>" maxlength="30"/>
+					<label></label><input style="width:275px" type="text" id="consignee_adress2" name="consignee_adress2" value="<?php echo $ConsigneeAddress2;?>" maxlength="30"/>
+					<label></label><input style="width:275px" type="text" id="consignee_adress3" name="consignee_adress3" value="<?php echo $ConsigneeAddress3;?>" maxlength="30"/>
+					<label>Addressinfo</label><input style="width:275px" type="text" id="consignee_addressinfo" name="consignee_addressinfo" value="<?php echo $ConsigneeAddressinfo;?>"/>
+					<label>Pincode <span class="required">*</span></label><input style="width:160px" type="text" maxlength="6" id="consignee_pincode" name="consignee_pincode" value="<?php echo $ConsigneePincode;?>"/>
+					<label>Mobile</label><input style="width:160px" maxlength="15" type="text" id="consignee_mobile" name="consignee_mobile" value="<?php echo $ConsigneeMobile;?>"/>
+					<label>Telephone</label><input style="width:160px" maxlength="15" type="text" id="consignee_telephone" name="consignee_telephone" value="<?php echo $ConsigneeTelephone;?>"/>
+					<label>Attention</label><input style="width:160px" type="text" id="consignee_attention" name="consignee_attention" value="<?php echo $ConsigneeName;?>"/>
+					<label>EmailID</label><input style="width:160px" type="text" id="consignee_emailid" name="consignee_emailid" value="<?php echo $ConsigneeEmailID;?>"/>
+					<label>Latitude</label><input style="width:160px" type="text" id="consignee_latitude" name="consignee_latitude" value="<?php echo $ConsigneeLatitude;?>"/>
+					<label>Longitude</label><input style="width:160px" type="text" id="consignee_longitude" name="consignee_longitude" value="<?php echo $ConsigneeLongitude;?>"/>
+					<label>CountryCode</label><input style="width:160px" type="text" id="consignee_countrycode" name="consignee_countrycode" value="<?php echo $ConsigneeCountryCode;?>"/>
+					<label>StateCode</label><input style="width:160px" type="text" id="consignee_statecode" name="consignee_statecode" value="<?php echo $ConsigneeStateCode;?>"/>
+				</FIELDSET>	
+
+				<div id="shipment_infromation2" class="bluedart_shipment_creation_part">
+					<div class="text_short" id="bluedart_shipment_info_items">
+						<div>
+						<?php if($itemscount != 0){?>
+						<div style="margin-bottom: -15px;">Items not shipped yet</div>
+						<br />
+						<table id="bluedart_items_table">
+							<tr>
+								<th class="bluedart_item_name">Name</th>
+								<th class="bluedart_item_qty">Qty</th>
+							</tr>
+						<?php
+							$itm_ids = "";
+							$qty_counter=0;
+							$sess_qty = 0;
+							$tot_wt = 0;
+							$tot_price = 0;
+
+							$main_weight = 0;
+							$main_price = 0;
+
+							foreach($itemsv as $item){
+								if($item->getQtyOrdered() > $item->getQtyShipped() or $isShipped == false){
+									
+									$qty_counter++;
+									$s_qty = 0;
+									$_qty = 0;
+									if($itm_ids != "") $itm_ids .= ",";
+									$itm_ids .= $item->getId();								
+						?>
+								<tr id="item<?php echo $item->getId(); ?>" class="bluedart_item_tobe_shipped">
+									<?php
+										$session_flag = 0;
+										if(isset($_SESSION['bluedartItemsQty']))
+										{
+											$qtyArr = $_SESSION['bluedartItemsQty'];
+
+											$s_qty = abs($qtyArr[$item->getId()]);
+											$session_flag = 1;	
+											$sess_qty += $s_qty;
+										}
+										
+										if($session_flag == 0) {	
+											$_qty=abs($item->getQtyOrdered() - $item->getQtyShipped());
+											if($_qty==0 and $isShipped){
+												$_qty=intval($item->getQtyShipped());
+												
+											}
+										}
+
+										$strlen_prod_name = strlen($item->getName());
+										
+										$commodity_name[$qty_counter] = $item->getName();
+										$commodity_id_change[$qty_counter] = $item->getId();
+
+										$tot_wt = $item->getWeight() * $_qty;
+										$tot_price = $item->getBasePrice() * $_qty;
+
+										$main_weight += $tot_wt;
+										$main_price += $tot_price;
+
+									?>
+									<td class="bluedart_item_name">
+										<span title="<?php echo $item->getName(); ?>"><?php echo substr($item->getName(), 0, 30); if($strlen_prod_name > 30) { ?> ... <?php } ?></span>
+									</td>
+									<td class="bluedart_item_qty">
+										<input class="bluedart_input_items_qty" type="text" name="bluedart_items[<?php echo $item->getId(); ?>]" id="bluedart_input_items_qty_<?php echo $item->getId(); ?>" value="<?php if($s_qty > 0) { echo $s_qty; } else { echo $_qty; } ?>" onchange="qtyAlert(<?php echo $item->getId(); ?>);"/>
+
+										<input type="hidden" id="bluedart_item_id_<?php echo $item->getId() ?>" name="bluedart_item_id_<?php echo $qty_counter ?>" value="<?php echo $item->getId() ?>" />
+
+										<input type="hidden" id="bluedart_total_items_<?php echo $item->getId(); ?>" name="bluedart_total_items_<?php echo $item->getId(); ?>" value="<?php if($s_qty > 0) { echo $s_qty; } else { echo $_qty; }  ?>" />
+
+										<input type="hidden" id="bluedart_items_base_price_<?php echo $item->getId(); ?>" name="bluedart_items_base_price_<?php echo $item->getId(); ?>" value="<?php echo $tot_price;?>" />
+
+										<input type="hidden" id="def_bluedart_items_base_price_<?php echo $item->getId(); ?>" name="def_bluedart_items_base_price_<?php echo $item->getId(); ?>" value="<?php echo $item->getBasePrice() ?>" />
+
+										<input type="hidden" id="bluedart_items_base_weight_<?php echo $item->getId(); ?>" name="bluedart_items_base_weight_<?php echo $item->getId(); ?>" value="<?php echo $tot_wt;?>" />
+
+										<input type="hidden" id="def_bluedart_items_base_weight_<?php echo $item->getId(); ?>" name="def_bluedart_items_base_weight_<?php echo $item->getId(); ?>" value="<?php echo $item->getWeight() ?>" />
+
+										<input type="hidden" id="bluedart_items_total_<?php echo $item->getId(); ?>" name="bluedart_items_total_<?php echo $item->getId(); ?>" value="<?php echo $_qty; ?>" />
+									</td>
+								</tr>
+						<?php
+								}
+							}
+						?>
+							<tr>
+								<td colspan="2" style="font-weight: bold;background: none repeat scroll 0% 0% rgb(224, 224, 224);">Number of items to be shipped:</td>
+								<td>
+									<span id="items_tobe_shipped_number">
+									<?php
+										if($sess_qty) { echo $sess_qty; }
+										else { echo $itemscount; } 
+									?>
+									</span>
+									<input type="hidden" id="all_prod_ids" name="all_prod_ids" value="<?php echo $itm_ids; ?>" />
+									<input type="hidden" id="counter_val" name="counter_val" value="<?php echo $qty_counter ?>" />
+								</td>
+							</tr>
+						</table>
+						<?php } else { ?>
+							<div style="color: green; width: 200px; margin: 0pt auto;">All items have been shipped</div>
+						<?php } ?>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<FIELDSET class="bluedart_service">
+				<legend>Service</legend>
+				<label>Pieces</label>
+					<input style="width:30px" type="hidden" id="service_pieces" name="service_pieces" value="<?php if($sess_qty) { echo $sess_qty; } else { echo $itemscount; }  ?>"/>
+
+					<span id="items_tobe_shipped_number_pieces">
+						<?php if($sess_qty) { echo $sess_qty; } else { echo $itemscount; } ?>
+					</span>
+
+				<label>Product Code <span class="required">*</span></label><input style="width:30px; text-transform: uppercase;" maxlength="1" type="text" class="required" id="service_productcode" name="service_productcode" value="<?php if($ProductCode) { echo $ProductCode; } else { echo "A"; } ?>"/>
+				<?php
+					if(!$SubProductCode){
+						if($_order->getPayment()->getMethodInstance()->getCode() == 'cashondelivery')
+							$SubProductCode = 'C';
+						else
+							$SubProductCode = 'P';
+					}
+				?>
+				<label>Sub Product</label><input type="text" style="width:30px; text-transform: uppercase;" maxlength="1" id="service_subproduct" name="service_subproduct" value="<?php echo $SubProductCode; ?>"/>
+
+				<?php 
+					$act_wt = 0;
+					if($ActualWeight != "" && $ActualWeight > 0) {
+						$act_wt = $ActualWeight;
+					} else {
+						if($main_weight != "" && $main_weight > 0) {
+							$act_wt = $main_weight;
+						}	
+					}
+					
+				?>
+				<label>Act. Weight</label><input style="width:100px" type="text" id="service_actweight" name="service_actweight" value="<?php echo $act_wt; ?>" maxlength="11"/>
+
+				<label>Invoice No.</label>
+				<?php if($invIncrementIDs){ ?>
+					<select name="service_invoiceno" id="service_invoiceno">
+						<option value="">-Please Select-</option>	
+						<?php foreach($invIncrementIDs as $in){ ?>
+						<option value="<?php echo $in ?>"><?php echo $in ?></option>
+						<?php } ?>				
+					</select>
+				<?php } else { ?>
+				  <input style="width:160px" type="text" id="service_invoiceno" name="service_invoiceno" value="<?php echo $InvoiceNo; ?>" maxlength="10"/>
+				<?php } ?>
+				<label>Product Type</label>
+				<input class="radio" type="radio" name="dox" value="Docs" checked="checked"><span>Dox</span>
+				<input class="radio" type="radio" name="dox" value="Dutiables"><span>nDox</span>
+				<br/><br/>
+				<label>Pack Type</label><input style="width:30px" type="text" id="service_packtype" name="service_packtype" value="<?php echo $PackType; ?>" maxlength="1"/>
+				<label>Credit Ref No. <span class="required">*</span></label><input style="width:160px" type="text" id="service_creaditrefno" name="service_creaditrefno" class="required" value="<?php echo $CreditReferenceNo; ?>" maxlength="20"/>
+				<label>Spcl.Instruction</label><input type="text" id="service_spclinstruction" name="service_spclinstruction" value="<?php echo $SpecialInstruction; ?>" maxlength="50"/>
+				<?php
+					if(!$PickupDate) {
+						$PickupDate = date("Y-m-d");//Mage::getModel('core/date')->Date('Y-m-d');
+					}
+				?>			
+				<label>Pickup Date <span class="required">*</span></label>
+				<div style="float: left;width: 60%;" class="pickupdatewrapper">
+					<input type="text" class="required" id="service_pickupdate" name="service_pickupdate" maxlength="10" value="<?php echo $PickupDate; ?>"/>
+				</div>
+				<?php
+					if(!$PickupTime){
+						$PickupTime = date("Hi");//Mage::getModel('core/date')->Date('Hi');
+					}
+				?>	
+				<label>Pickup Ready Time <span class="required">*</span></label><input style="width:45px;float:left" size="7" type="text" class="required" id="service_pickupreadytime" name="service_pickupreadytime" value="<?php echo $PickupTime; ?>" maxlength="4" /><span>&nbsp;&nbsp;Format 2359</span><br/>
+				
+				<label style="clear:both">Waybill PDF file</label>
+				<input class="radio" type="radio" name="PDFOutputNotRequired" id="PDFOutputRequired" <?php if($PDFOutputNotRequired=="false" || $PDFOutputNotRequired==""){ ?>checked="checked"<?php } ?> value="false"><span>Required</span>
+				<input type="radio" class="radio" name="PDFOutputNotRequired" id="PDFOutputNotRequired" <?php if($PDFOutputNotRequired=="true"){ ?>checked="checked"<?php } ?> value="true"><span>Not Required</span>
+				<br/>
+
+				<?php 
+					$act_price = 0;
+					if($DeclaredValue != "" && $DeclaredValue > 0) {
+						$act_price = $DeclaredValue;
+					} else {
+						if($main_price  != "" && $main_price > 0) {
+							$act_price = $main_price;
+						}	
+					}
+				?>
+
+				<label>Declared Val</label><input style="width:160px" type="text" id="service_declaredval" name="service_declaredval" value="<?php echo $act_price; ?>" maxlength="13"/>
+				<?php
+					if(!$CollectableAmount){
+						if($_order->getPayment()->getMethodInstance()->getCode() == 'cashondelivery')
+							$CollectableAmount = $act_price;
+					}
+				?>
+				<label>Col. Amount</label><input style="width:160px" type="text" id="service_colamount" name="service_colamount" value="<?php echo $CollectableAmount; ?>" maxlength="13"/>
+				<!--<label>Waybill Number</label>--><!-- <input style="width:150px" type="hidden" id="service_waybillnumber" name="service_waybillnumber" value="<?php echo $ServiceWayBillNumber; ?>"/><br/> -->
+
+				<?php
+					if($CommodityDetail1 == "") {
+						if(isset($commodity_name[1])) {
+							$CommodityDetail1 = $commodity_name[1]; 
+							$Commoditypid1 = $commodity_id_change[1]; 
+						}	
+					}
+
+					if($CommodityDetail2 == "") {
+						if(isset($commodity_name[2])) {
+							$CommodityDetail2 = $commodity_name[2]; 
+							$Commoditypid2 = $commodity_id_change[2];
+						}	
+					}
+
+					if($CommodityDetail3 == "") {
+						if(isset($commodity_name[3])) {
+							$CommodityDetail3 = $commodity_name[3]; 
+							$Commoditypid3 = $commodity_id_change[3];
+						}	
+					}
+				?>
+
+				<label>Cmdty Detail 1</label><input class="removenamebypid_<?php echo $Commoditypid1 ?>" style="width:160px" type="text" id="service_cmdtydetail1" name="service_cmdtydetail1" value="<?php echo $CommodityDetail1; ?>" maxlength="30" />
+				<input type="hidden" value="<?php echo $CommodityDetail1; ?>" id="addnamebypid_<?php echo $Commoditypid1 ?>" />
+
+				<label>Cmdty Detail 2</label><input class="removenamebypid_<?php echo $Commoditypid2 ?>" style="width:160px" type="text" id="service_cmdtydetail2" name="service_cmdtydetail2" value="<?php echo $CommodityDetail2; ?>" maxlength="30"/>
+				<input type="hidden" value="<?php echo $CommodityDetail2; ?>" id="addnamebypid_<?php echo $Commoditypid2 ?>" />
+
+				<label>Cmdty Detail 3</label><input class="removenamebypid_<?php echo $Commoditypid3 ?>" style="width:160px" type="text" id="service_cmdtydetail3" name="service_cmdtydetail3" value="<?php echo $CommodityDetail3; ?>" maxlength="30"/>
+				<input type="hidden" value="<?php echo $CommodityDetail3; ?>" id="addnamebypid_<?php echo $Commoditypid3 ?>" />
+
+				<label>AWBNo</label>
+				<input style="width:160px" type="text" id="service_awbnumber" name="service_awbnumber" value="<?php echo $AWBNo; ?>" maxlength="9"/>
+
+				<label>DeliveryTimeSlot</label>
+				<input style="width:160px" type="text" id="service_deliverytimeslot" name="service_deliverytimeslot" value="<?php echo $DeliveryTimeSlot; ?>" maxlength="10"/>
+
+				<label>ParcelShopCode</label>
+				<input style="width:160px" type="text" id="service_parcelshopcode" name="service_parcelshopcode" value="<?php echo $ParcelShopCode; ?>" maxlength="10"/>
+
+				<?php
+					if(!$CustomerEDD) {
+						$CustomerEDD = date("Y-m-d");//Mage::getModel('core/date')->Date('Y-m-d');
+					}
+				?>
+				<label>CustomerEDD</label>
+				<div style="float: left;width: 60%;" class="pickupdatewrapper">
+					<input type="text" id="service_customerEDD" name="service_customerEDD" maxlength="10" value="<?php echo $CustomerEDD; ?>">
+				</div>
+
+				<label>Credit Ref. No. 2</label>
+				<input style="width:160px" type="text" id="service_creaditrefno2" name="service_creaditrefno2" value="<?php echo $CreditReferenceNo2; ?>" maxlength="20">
+
+				<label>Credit Ref. No. 3</label>
+				<input style="width:160px" type="text" id="service_creaditrefno3" name="service_creaditrefno3" value="<?php echo $CreditReferenceNo3; ?>" maxlength="20">
+
+				<label>PickupType</label>
+				<input style="width:160px" type="text" id="service_pickuptype" name="service_pickuptype" value="<?php echo $PickupType; ?>" maxlength="15">
+
+				<?php
+					if(!$ItemCount) {
+						if($sess_qty) { $ItemCount = $sess_qty; } else { $ItemCount = $itemscount; }
+					}
+				?>
+				<label>ItemCount</label>
+				<input style="width:160px" type="text" id="service_itemcount" name="service_itemcount" value="<?php echo $ItemCount; ?>">
+
+				<label style="width: 160px;">TotalCashPaytoCustomer</label>
+				<input style="width:115px" type="text" id="service_totalcashpaytocustomer" name="service_totalcashpaytocustomer" value="<?php echo $TotalCashPaytoCustomer; ?>">
+
+				<label style="width: 160px;">PreferredPickupTimeSlot</label>
+				<input style="width:115px" type="text" id="service_preferredpickuptimeslot" name="service_preferredpickuptimeslot" value="<?php echo $PreferredPickupTimeSlot; ?>">
+
+				<label style="width: 160px;">DeferredDeliveryDays</label>
+				<input style="width:115px" type="text" id="service_deferreddeliverydays" name="service_deferreddeliverydays" value="<?php echo $DeferredDeliveryDays; ?>">
+
+				<label>Officecutofftime</label>
+				<input style="width:45px;float:left" type="text" id="service_officecutofftime" name="service_officecutofftime" value="<?php echo $Officecutofftime; ?>"><span>&nbsp;&nbsp;Format 1800</span>
+
+				<label style="clear:both">IsPartialPickup</label>
+				<input class="radio" type="radio" name="service_ispartialpickup" <?php if($IsPartialPickup=="false" || $IsPartialPickup==""){ ?>checked="checked"<?php } ?> value="false"><span>No</span>
+				<input type="radio" class="radio" name="service_ispartialpickup" <?php if($IsPartialPickup=="true"){ ?>checked="checked"<?php } ?> value="true"><span>Yes</span><br/>
+
+				<label style="clear:both">PickupMode</label>
+				<input class="radio" type="radio" name="service_pickupmode" <?php if($PickupMode=="P" || $PickupMode==""){ ?>checked="checked"<?php } ?> value="P"><span>P&nbsp;&nbsp;</span>
+				<input type="radio" class="radio" name="service_pickupmode" <?php if($PickupMode=="C"){ ?>checked="checked"<?php } ?> value="C"><span>C</span><br/>
+
+				<!-- <label style="clear:both">IsDDN</label>
+				<input class="radio" type="radio" name="service_isDDN" <?php if($IsDDN=="false" || $IsDDN==""){ ?>checked="checked"<?php } ?> value="false"><span>No</span>
+				<input type="radio" class="radio" name="service_isDDN" <?php if($IsDDN=="true"){ ?>checked="checked"<?php } ?> value="true"><span>Yes</span><br/> -->
+
+				<label style="clear:both">RegisterPickup</label>
+				<input class="radio" type="radio" name="service_registerpickup" <?php if($RegisterPickup=="false" || $RegisterPickup==""){ ?>checked="checked"<?php } ?> value="false"><span>No</span>
+				<input type="radio" class="radio" name="service_registerpickup" <?php if($RegisterPickup=="true"){ ?>checked="checked"<?php } ?> value="true"><span>Yes</span><br/>
+
+				<label style="clear:both">IsForcePickup</label>
+				<input class="radio" type="radio" name="service_isforcepickup" <?php if($IsForcePickup=="false" || $IsForcePickup==""){ ?>checked="checked"<?php } ?> value="false"><span>No</span>
+				<input type="radio" class="radio" name="service_isforcepickup" <?php if($IsForcePickup=="true"){ ?>checked="checked"<?php } ?> value="true"><span>Yes</span>
+				<div style="height: 80px"></div>
+				<fieldset>
+					<legend>Dimentions</legend>
+					<!-- <label>Dimentions</label><div style="clear:both"><div> -->
+					<label>L</label>
+					<input style="width:30px" type="text" id="service_dimentionsl" name="service_dimentionsl" value="<?php echo $Length; ?>" maxlength="9"/>
+					<label>B</label>
+					<input style="width:30px" type="text" id="service_dimentionsb" name="service_dimentionsb" value="<?php echo $Breadth; ?>" maxlength="9"/>
+					<label>H</label>
+					<input style="width:30px" type="text" id="service_dimentionsh" name="service_dimentionsh" value="<?php echo $Height; ?>" maxlength="9"/>
+					<label>Count</label>
+					<input style="width:30px" type="text" id="service_count" name="service_count" value="<?php echo $Count; ?>"/>
+				</fieldset>
+			</FIELDSET>
+		
+			<div style="float: right;margin-bottom: 20px;margin-top: -11px;">
+			    <?php if($_order->canShip()):?>
+				    <input name="bluedart_return_shipment_creation_date" type="hidden" value="create" />
+				    <input name="bluedart_is_pickup_require" type="hidden" value="0" id="bluedart_is_pickup_require"/>
+				    <button id="bluedart_shipment_pickup_create" type="button" name="bluedart_shipment_creation_submit" onclick="shipmentpickupcreate()" >Create Shipment & Pickup</button>
+					<button id="bluedart_shipment_creation_submit_id" onclick="shipmentwithoutpickupcreate()" type="button" name="bluedart_shipment_creation_submit" >Create Shipment</button>
+				<?php endif; ?>
+				<button id="resetBtn" onclick="reset();resetForm();" type="button">Reset</button>
+
+				<?php /* Remove "Return Order" button
+				$history = array();
+	            if ($_order->getShipmentsCollection()->count()) {
+	                foreach ($_order->getShipmentsCollection() as $_shipment) {
+	                    if ($_shipment->getCommentsCollection()->count()) {
+	                        foreach ($_shipment->getCommentsCollection() as $_comment) {
+	                            $history[] = $_comment->getComment();
+	                        }
+	                    }
+	                }
+	            }
+
+	            $bluedart_return_button = false;
+	            if (count($history)) {
+	                foreach ($history as $_history) {
+	                    $awbno = strstr($_history, "- Order No", true);
+	                    $awbno = trim($awbno, "AWB No.");
+	                    break;
+	                }
+	                if (isset($awbno)) {
+	                    if ((int) $awbno)
+	                        $bluedart_return_button = true;
+	                }
+	            }
+				?>
+				<?php if(!$_order->canShip() && $bluedart_return_button){ ?>
+				    <input name="bluedart_return_shipment_creation_date" type="hidden" value="return" />
+					<button id="bluedart_return_shipment_creation_submit_id" type="submit" name="bluedart_return_shipment_creation_submit_id">Return Order</button>
+					<script>
+						var jccc = jQuery.noConflict();
+					  	jccc(function(){					
+							jccc("#bluedart_shipment_info_billing_account_id").val(2);
+							jccc("#bluedart_shipment_info_billing_account_id").trigger('change');
+	                    });					
+					</script>
+				<?php } */ ?>
+				
+				<button onclick="bluedartclose()" type="button">Close</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="background-popup" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000000;border:1px solid #cecece;z-index:300;opacity:0.7"></div>
+
+<?php 
+  $allowed_domestic_methods =   explode(',', $scopeConfig->getValue('bluedartsettings/config/allowed_domestic_methods',$storeScope));
+  $allowed_international_methods =  explode(',', $scopeConfig->getValue('bluedartsettings/config/allowed_international_methods',$storeScope));
+
+?>
+<style type="text/css">
+	input{margin: 2px 0;}
+	#items_tobe_shipped_number_pieces{width: 61%;}
+	.pickupdatewrapper input{float: left;width: 160px !important;}
+	.pickupdatewrapper label.error{float: right !important;width: 190px !important;padding-left: 0px !important;}
+	label[for="service_pickupreadytime"].error {float: right !important;width: 17% !important;padding-left: 0px !important;}
+	/*label[for="service_productcode"].error {width: 240px !important; padding-left: 94px !important;}*/
+	label[for="shipper_clientname"].error, label[for="shipper_address1"].error, label[for="consignee_name"].error, label[for="consignee_adress1"].error {margin-left: 0px !important;width: 240px !important; padding-left: 0px !important;}
+	label.error {width: 240px !important; padding-left: 94px !important;}
+	#bluedart_shipment input[type="text"]{ width: 160px; }
+</style>
+
+<!-- <script src="https://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script> -->
+
+<script>
+	var jccc = jQuery.noConflict();
+	jQuery("#bluedart_shipment").validate({
+      	rules: {
+	        shipper_area: {required:true,alphabets:true},
+	        shipper_customercode: {required:true,alphanumeric:true},
+	        service_productcode: {required:true,alphabets:true},
+	        service_pickupdate: "required",
+	        shipper_clientname : {required:true,allsymbol:true},
+	        shipper_address1: {required:true,allsymbol:true},
+	        shipper_address2: {allsymbol:true},
+	        shipper_address3: {allsymbol:true},
+	        shipper_pincode: {required:true,minlength: 6,number:true},
+	        shipper_telephone: {number:true,minlength: 6},
+	        shipper_mobile: {number:true,minlength: 10},
+			shipper_email: {email:true},
+			shipper_sender: {allsymbol:true},
+			shipper_vendorcode: {alphanumeric:true},
+			consignee_name: {required:true,allsymbol:true},
+			consignee_adress1: {required:true,allsymbol:true},
+			consignee_adress2: {allsymbol:true},
+			consignee_adress3: {allsymbol:true},
+			consignee_pincode: {required:true,number:true,minlength: 6},
+			consignee_mobile:{number:true,minlength: 10},
+			consignee_telephone:{number:true,minlength: 6},
+			consignee_attention:{allsymbol:true},
+			service_subproduct: {alphabets:true},
+			service_pieces: {number:true},
+			service_actweight: {number:true},
+			service_packtype: {alphanumeric:true},
+			service_invoiceno: {alphanumeric:true},
+			service_spclinstruction: {allsymbol:true},
+			service_declaredval: {number:true},
+			service_colamount:{number:true},
+			service_creaditrefno:{alphanumeric:true},
+			service_pickupreadytime: {required:true,number:true},
+			//service_pickupreadytime: {required:true,time:true},
+			service_dimentionsl:{number:true},
+			service_dimentionsb:{number:true},
+			service_dimentionsh:{number:true},
+			service_count:{number:true},
+			service_cmdtydetail1: {alphanumeric:true},
+			service_cmdtydetail2: {alphanumeric:true},
+			service_cmdtydetail3: {alphanumeric:true},
+      	},
+  	});
+	
+	function resetForm() {
+		jQuery("#bluedart_shipment").validate().resetForm();
+	}
+
+	function qtyAlert(prodid) {
+		var bluedart_input_items_qty = 0;
+		var bluedart_items_total = 0;
+		var product_id = 0;
+		var final_qty = 0;
+		var all_prod_ids = "";
+		var prids = "";
+		var r = 0;
+		var pid = 0;
+
+		var bluedart_items_base_price = 0;
+		var bluedart_items_base_weight = 0;
+		var def_bluedart_items_base_price = 0;
+		var def_bluedart_items_base_weight = 0;
+		var service_actweight = 0;
+		var service_declaredval = 0;
+
+		product_id = prodid;
+		bluedart_input_items_qty = document.getElementById('bluedart_input_items_qty_'+product_id).value;
+		bluedart_items_total = document.getElementById('bluedart_items_total_'+product_id).value;
+		def_bluedart_items_base_price = document.getElementById('def_bluedart_items_base_price_'+product_id).value;
+		def_bluedart_items_base_weight = document.getElementById('def_bluedart_items_base_weight_'+product_id).value;
+
+		document.getElementById('bluedart_total_items_'+product_id).value = bluedart_input_items_qty;
+
+		if(bluedart_input_items_qty > bluedart_items_total) {
+			alert('Please enter proper quantity to ship.');
+			document.getElementById('bluedart_input_items_qty_'+product_id).value = bluedart_items_total;
+			document.getElementById('bluedart_total_items_'+product_id).value = bluedart_items_total;
+
+			bluedart_items_base_weight = def_bluedart_items_base_weight * bluedart_items_total;
+			bluedart_items_base_price = def_bluedart_items_base_price * bluedart_items_total;
+		} else {
+			bluedart_items_base_weight = def_bluedart_items_base_weight * bluedart_input_items_qty;
+			bluedart_items_base_price = def_bluedart_items_base_price * bluedart_input_items_qty;
+		} 
+		
+		document.getElementById('bluedart_items_base_weight_'+product_id).value = bluedart_items_base_weight;
+		document.getElementById('bluedart_items_base_price_'+product_id).value = bluedart_items_base_price;
+
+		all_prod_ids = document.getElementById('all_prod_ids').value;
+
+		prids = all_prod_ids.split(",");
+
+		for(r=0;r<prids.length;r++) {
+			pid = prids[r];
+			final_qty += parseInt(document.getElementById('bluedart_input_items_qty_'+pid).value);	
+			service_declaredval += parseInt(document.getElementById('bluedart_items_base_price_'+pid).value);
+			service_actweight += parseInt(document.getElementById('bluedart_items_base_weight_'+pid).value);
+		}
+
+		if(final_qty < 1) {
+			alert('You can not create shipment with 0 products');
+			document.getElementById('bluedart_input_items_qty_'+product_id).value = bluedart_items_total;
+		} else {
+			document.getElementById("items_tobe_shipped_number").innerHTML = final_qty; 
+			document.getElementById("items_tobe_shipped_number_pieces").innerHTML = final_qty; 
+			document.getElementById('service_pieces').value = final_qty;
+
+			document.getElementById('service_actweight').value = service_actweight;
+			document.getElementById('service_declaredval').value = service_declaredval;
+
+			if(bluedart_input_items_qty == 0)
+			{
+				jQuery('.removenamebypid_'+product_id).val("");			
+			}
+			else
+			{
+				jQuery('.removenamebypid_'+product_id).val(document.getElementById('addnamebypid_'+product_id).value);
+			}
+		}
+		//alert(prodid);
+	}
+
+
+	function bluedartpop(itemscount)
+	{		
+		if(itemscount >= 0){
+			jccc(".background-popup").css("display", "block");
+			jccc("#bluedart_overlay").css("display", "block");
+			jccc("#bluedart_shipment_creation").fadeIn(1000);
+		}
+		else{
+			alert('Cannot create a shipment, all items have been shipped');
+		}
+	}	
+
+	function bluedartclose()
+	{
+		jccc(".background-popup").css("display", "none");
+		jccc("#bluedart_overlay").css("display", "none");
+		jccc("#bluedart_shipment_creation").fadeOut(500);
+	}
+	function shipmentpickupcreate()
+	{
+		jQuery("#bluedart_is_pickup_require").val(1);		
+		jQuery("#bluedart_shipment").submit();		
+	}
+	function shipmentwithoutpickupcreate()
+	{
+		jQuery("#bluedart_is_pickup_require").val(0);		
+		jQuery("#bluedart_shipment").submit();		
+	}
+	var messages_content;
+	<?php if($this->getRequest()->getParam('bluedart_shipment_info_product_group') == 'show'){ ?>
+		bluedartpop(1);
+		jccc("#messages").ready(function(){
+			jccc("#bluedart_messages").html(jccc("#messages").html());
+		});
+	<?php } ?>
+
+	jQuery(document).ready(function(){
+		if((jQuery('#bluedart_messages').html() != "") && (jQuery('.error-msg'))){
+			jQuery("#bluedart_overlay").css("display", "block");
+			jQuery("#bluedart_shipment_creation").fadeIn(1000);
+		}
+
+		jccc('#filereset').click(function(){
+			jccc("#file1_div").html(jccc("#file1_div").html());
+		});
+		jccc('#file2reset').click(function(){
+			jccc("#file2_div").html(jccc("#file2_div").html());
+		});
+		jccc('#file3reset').click(function(){
+			jccc("#file3_div").html(jccc("#file3_div").html());
+		});
+
+		jQuery.validator.addMethod("alphabets", function(value, element) {
+		return this.optional(element) || /^[a-zA-Z]+$/i.test(value);
+		}, "Please enter valid alphabets only.");
+
+		jQuery.validator.addMethod("smallalphabets", function(value, element) {
+		return this.optional(element) || /^[a-z]+$/i.test(value);
+		}, "Please enter valid alphabets only.");
+
+		jQuery.validator.addMethod("alphanumeric", function(value, element) {
+		return this.optional(element) || /^[A-Z0-9]+$/i.test(value);
+		}, "Please enter valid data only.");
+
+		jQuery.validator.addMethod("allsymbol", function(value, element) {
+		 return this.optional(element) || /^[a-zA-Z0-9\,\.\/?;:\'\\\~\!\@\"\#\$\%\^\&\*\(\)\[\]\+\=\_ \/\-]+$/i.test(value);
+		}, "Please enter valid alphabets or number only.");
+
+		jQuery.validator.addMethod("onlysymbols", function(value, element) {
+		return this.optional(element) || /^[0-9:,]+$/i.test(value);
+		}, "Please enter valid number.");
+		/*
+		jQuery.validator.addMethod("time", function(value, element) {  
+		return this.optional(element) || /^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])?$/i.test(value);}, "Please enter a valid time.");
+		*/
+	});
+		
+	jQuery("#bluedart_shipment_info_product_type").chained("#bluedart_shipment_info_product_group");
+	jQuery("#bluedart_shipment_info_service_type").chained("#bluedart_shipment_info_product_group");
+</script>
+
+<script>
+require([
+      "jquery",
+      "mage/calendar"
+  	], function($){
+    $("#service_pickupdate").calendar({
+        buttonText:"Select",
+        dateFormat: "Y-M-d",
+        closeText: "Done",
+        selectOtherMonths: true
+    });
+
+    $("#service_customerEDD").calendar({
+        buttonText:"Select",
+        dateFormat: "Y-M-d",
+        closeText: "Done",
+        selectOtherMonths: true
+    });
+});
+</script>
+
+<?php $formSession->unsetData('form_bluedartdata'); ?>

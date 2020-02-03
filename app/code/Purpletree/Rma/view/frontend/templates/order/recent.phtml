@@ -1,0 +1,104 @@
+<?php
+/**
+ * Purpletree_Rma Recent
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+?>
+<div class="block block-dashboard-orders">
+<?php $_orders = $block->getOrders(); ?>
+    <div class="block-title order">
+        <strong><?php /* @escapeNotVerified */ echo __('Recent Orders') ?></strong>
+        <?php if (sizeof($_orders->getItems()) > 0): ?>
+            <a class="action view" href="<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order/history') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('View All') ?></span>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div class="block-content">
+    <?php echo $block->getChildHtml()?>
+    <?php if (sizeof($_orders->getItems()) > 0): ?>
+        <div class="table-wrapper orders-recent">
+            <table class="data table table-order-items recent" id="my-orders-table">
+                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Recent Orders') ?></caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order #') ?></th>
+                        <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Date') ?></th>
+                        <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Ship To') ?></th>
+                        <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Order Total') ?></th>
+                        <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                        <th scope="col" class="col actions"><?php /* @escapeNotVerified */ echo __('Action') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($_orders as $_order): ?>
+                        <tr>
+                            <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getRealOrderId() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_order->getCreatedAt()) ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $_order->getStatusLabel() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                                <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($_order) ?>" class="action view">
+                                    <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
+                                </a>
+                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
+                                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo
+                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                        ->getPostData($block->getReorderUrl($_order))
+                                    ?>' class="action order">
+                                        <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
+                                    </a>
+									<?php /* Return */
+$objectManager  = \Magento\Framework\App\ObjectManager::getInstance();
+$data_helper 	= $objectManager->create('Purpletree\Rma\Helper\Data');
+$isEnabled 		= $data_helper->isEnabled();
+	if($isEnabled) { 
+		$order 			= $_order;
+		$_orderreturn   = $objectManager->create('Purpletree\Rma\Model\ResourceModel\Orderreturn');
+		$entityId = $_orderreturn->getOrderreturnIdByOrderId($order->getRealOrderId());
+			if(!$entityId) { 
+				if($order->getState() == 'complete') {
+					$statusHistoryItem = $order->getStatusHistoryCollection()->getFirstItem();
+					  $status_date 	   = $statusHistoryItem->getCreatedAt();
+					  if($status_date == '') {
+						  foreach($order->getShipmentsCollection() as $shipment){
+								/** @var $shipment Mage_Sales_Model_Order_Shipment */
+							$status_date = $shipment->getCreatedAt();
+						  }
+					  }
+					 $datee 		   = $objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime');
+					 $time_frame 	   = $data_helper->getGeneralConfig('/general/day_completion');
+					 $effectiveDate     = strtotime("+ " . $time_frame . ' days', strtotime($status_date)); //returns timestamp
+					   $effectiveDate  =  date('Y-m-d H:i:s', $effectiveDate); // formatted version
+						if ($datee->date() < $datee->date($effectiveDate)) {?>
+						<a href="<?php echo $this->getUrl('rma/index/initiate', ['order_id' => $order->getId()]); ?>" class="action view">
+							<span><?php echo __('Return') ?></span>
+						</a>
+				<?php } } } else { ?>
+						<a href="<?php echo $this->getUrl('rma/index/view', ['id' => $entityId]); ?>" class="action view">
+							<span><?php echo __('Return Status') ?></span>
+						</a>
+	<?php } }
+									 /* Return */ ?>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have placed no orders.'); ?></span></div>
+    <?php endif; ?>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "name": "purpletree/rma",
+  "description": "Rma",
+  "require": {
+    "php": ">=5.6.5, <=5.6.31 | 7.0.2 | 7.0.4 | >=7.0.6, <7.1 |  >=5.6.5, <=5.6.31 | >=7.1.0, <7.2"
+  },
+  "type": "magento2-module",
+  "version": "1.0.1",
+  "license": [
+    "custom"
+  ],
+  "author": [
+      {
+         "name": "Purpletree",
+         "email": "support@purpletreesoftware.com",
+         "homepage": "https://www.purpletreesoftware.com",
+         "role": "Developer"
+      }
+	  ],
+  "autoload": {
+    "files": [ "registration.php" ],
+	"psr-4": {
+            "Purpletree\\Rma\\": ""
+        }
+  }
+}

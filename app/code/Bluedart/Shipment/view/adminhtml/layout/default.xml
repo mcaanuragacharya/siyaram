@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+    	<css src="Bluedart_Shipment::css/bluedart.css"/>
+		<!--<link src="Bluedart_Shipment::js/jquery-1.10.2.min.js" />-->
+		 <!--<link src="Bluedart_Shipment::js/jquery.validate.min.js" />-->
+		<link src="Bluedart_Shipment::js/common.js" />
+		<link src="Bluedart_Shipment::js/jquery.chained.js" />
+		 <!--<link src="Bluedart_Shipment::js/massshipment.js" />-->
+ 	</head>
+</page>

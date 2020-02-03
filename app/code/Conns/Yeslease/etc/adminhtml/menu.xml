@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Conns_Yeslease::parent" title="Yeslease" module="Conns_Yeslease" sortOrder="100" resource="Conns_Yeslease::parent"/>
+        <add id="Conns_Yeslease::index" title="Yeslease Index" module="Conns_Yeslease" sortOrder="10" action="yeslease/index" resource="Conns_Yeslease::index" parent="Conns_Yeslease::parent"/>
+		
+    </menu>
+</config>

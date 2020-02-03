@@ -1,0 +1,80 @@
+<!--
+/**
+ * Purpletree_Rma return_orders
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+
+<div class="pts-container_review custom-pager">
+<?php  
+	    $returnOrderCollection = $block->getCollection();
+        if ($returnOrderCollection->getSize() > 0) :
+?>
+	   <div class="toolbar top">
+             <?php echo $block->getPagerHtml(); ?>
+          </div>
+	<div class="table-wrapper orders-history">
+	 <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php echo __('Return Order Records') ?></caption>
+            <thead>
+                <tr>
+                    <th class="col id" scope="col"><?php echo __('Order # ') ?></th>
+                    <th class="col reason" scope="col"><?php echo __('Reason') ?></th>
+                    <th class="col packagecondition" scope="col"><?php echo __('Package Condition') ?></th>
+                    <th class="col status" scope="col"><?php echo __('Status') ?></th>
+                    <th class="col resolution" scope="col"><?php echo __('Resolution') ?></th>
+                    <th class="col date" scope="col"><?php echo __('Created Date') ?></th>
+                    <th class="col actions" scope="col">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($returnOrderCollection as $returnOrder){
+				?>
+                    <tr>
+                        <td class="col id" data-th="<?php echo __('Order # ') ?>">
+						<?php if($this->getOrderidfromIncrementId($returnOrder->getPtsOrderId())) { ?>
+						<a target="_blank" href="<?php echo $this->getUrl('sales/order/view',['order_id' => $this->getOrderidfromIncrementId($returnOrder->getPtsOrderId())->getId()]);	?>">
+						<span><?php echo $returnOrder->getPtsOrderId(); ?></span>
+						</a>
+						<?php } else { ?>
+						<?php echo $returnOrder->getPtsOrderId(); ?>
+						<?php } ?>
+						</td>
+                        <td class="col reason" data-th="<?php echo __('Reason') ?>"><?php echo $this->getOrderreturnReason($returnOrder->getPtsReasonId()); ?></td>
+                        <td class="col packagecondition" data-th="<?php echo __('Package Condition') ?>"><?php echo $this->getOrderreturnPackageCondition($returnOrder->getPtsPackageconditionId()); ?></td>
+                        <td class="col status" data-th="<?php echo __('Status') ?>"><?php echo $this->getOrderreturnStatus($returnOrder->getPtsStatusId()); ?></td>
+                        <td class="col resolution" data-th="<?php echo __('Resolution') ?>"><?php echo $this->getOrderreturnResolution($returnOrder->getPtsResolutionId()); ?></td>
+                        <td class="col date" data-th="<?php echo __('Created Date') ?>">
+						<?php echo date('d-M-y',strtotime($returnOrder->getPtsCreatedAt()));?>
+						</td>
+						<td class="col actions" data-th="Actions">
+			<a href="<?php echo $this->getUrl('rma/index/view',['id' => $returnOrder->getPtsOrderreturnId()]) ?>" class="action view">
+							<span><?php /* @escapeNotVerified */ echo __('View') ?></span>
+						</a>
+						</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+	</div>
+	
+          <div style="clear: both"></div>
+     
+     <div class="toolbar-bottom">
+             <div class="toolbar bottom">
+                <?php echo $block->getPagerHtml(); ?>
+             </div>
+     </div>
+    <?php else : ?>
+          <p><?php echo __('No Return Orders Found!') ?></p>
+       <?php endif; ?>
+</div>

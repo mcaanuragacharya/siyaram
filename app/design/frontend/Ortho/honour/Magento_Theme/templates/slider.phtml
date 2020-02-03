@@ -1,0 +1,18 @@
+<?php /* 
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
+    $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+    $connection = $resource->getConnection();
+    $slider = $resource->getTableName('mageplaza_bannerslider_banner_slider'); //gives table name with prefix
+    $banner = $resource->getTableName('mageplaza_bannerslider_banner'); //gives table name with prefix
+    $sql = "SELECT image from ".$banner." WHERE banner_id IN(SELECT banner_id FROM ".$slider." WHERE slider_id = '1') ORDER BY banner_id DESC";
+    $result = $connection->fetchAll($sql);
+    $mediaPath = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'mageplaza/bannerslider/banner/image/';
+    //$imagesArray = array('main-banner1.png','main-banner2.jpg');
+    $random_keys=array_rand($result,count($result));
+?>
+<div class="owl-carousel homepage-carousel">
+<?php for($i=0;$i<count($result);$i++){
+    ?>
+    <div class="item"><img class="img-leftbanner" src="<?php echo $mediaPath.$result[$random_keys[$i]]['image'];?>" alt="<?php echo $result[$random_keys[$i]]['image'];?>" /></div>
+    <?php }?>
+</div> <?php */?>

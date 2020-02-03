@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma menu
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu> 
+		<add id="Purpletree_Rma::purpletree_return" title="Returns" module="Purpletree_Rma" sortOrder="30" resource="Purpletree_Rma::purpletree_return"/>
+		
+		<add id="Purpletree_Rma::return_elements" title="Return Orders" module="Purpletree_Rma" sortOrder="10" resource="Purpletree_Rma::purpletree_return" parent="Purpletree_Rma::purpletree_return"/>
+		
+		<add id="Purpletree_Rma::orderreturn" title="Manage Order Returns" module="Purpletree_Rma" sortOrder="10" action="purpletree_rma/orderreturn" resource="Purpletree_Rma::orderreturn" parent="Purpletree_Rma::return_elements"/>
+		
+		<add id="Purpletree_Rma::resolution" title="Manage Resolution" module="Purpletree_Rma" sortOrder="10" action="purpletree_rma/resolution" resource="Purpletree_Rma::resolution" parent="Purpletree_Rma::return_elements"/>
+
+		<add id="Purpletree_Rma::packagecondition" title="Manage Package condition" module="Purpletree_Rma" sortOrder="10" action="purpletree_rma/packagecondition" resource="Purpletree_Rma::packagecondition" parent="Purpletree_Rma::return_elements"/>
+		
+		<add id="Purpletree_Rma::status" title="Manage Status" module="Purpletree_Rma" sortOrder="10" action="purpletree_rma/status" resource="Purpletree_Rma::commission" parent="Purpletree_Rma::return_elements"/>	
+
+		<add id="Purpletree_Rma::reason" title="Manage Reason" module="Purpletree_Rma" sortOrder="10" action="purpletree_rma/reason" resource="Purpletree_Rma::reason" parent="Purpletree_Rma::return_elements"/>
+		
+		<add id="Purpletree_Rma::settings" title="Settings" module="Purpletree_Rma" sortOrder="11" resource="Purpletree_Rma::purpletree_return" parent="Purpletree_Rma::purpletree_return"/>
+	
+		<add id="Purpletree_Rma::purpletree_return_configuration" title="Configuration" module="Purpletree_Rma" sortOrder="99" parent="Purpletree_Rma::settings" action="adminhtml/system_config/edit/section/purpletree_rma" resource="Purpletree_Rma::purpletree_return_configuration"/>
+    </menu>
+</config>

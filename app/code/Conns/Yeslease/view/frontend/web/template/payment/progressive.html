@@ -1,0 +1,105 @@
+<div class="payment-method progressive-payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': 'p_method_progressive'}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label data-bind="attr: {'for': 'p_method_progressive'}" class="label"><span data-bind="text: getTitle()"></span>
+            <!-- ko if : image -->
+            <div class="payment-method-image"><img data-bind="attr:{ 'src': image }"></div>
+            <!-- /ko -->
+        </label>
+    </div>
+    <div class="payment-method-content">
+		<ul class="form-list" data-bind="attr:{'id': 'payment_form_'+getCode()}" >
+            <li class="onepage-progressive">
+                <div class="onepage-progressive-cnt">
+                    <div class="fieldset fieldset-connscredit">
+						<div id="progressive-verifylease">      
+							<form autocomplete="off" class="fields" id="conns-progressive-form">
+								<div class="field onepage-leaseid">
+									<label for="" class="label required">Please enter your approved credit Lease Id</label>
+									<div class="input-box">
+										<input data-validate="{'required-entry':true}" type="number" maxlength="6" id="applicant_lease_number" name="applicant_lease_number" data-bind="attr:{'value':autoLeaseNumberForCheckout}, event:{keypress:isNumber,click:fieldInit}" class="input-text validate-number required-entry" autocomplete="off">
+									</div>
+								</div>
+								 <div style="display:none" class="field onepage-lease-dob">
+									<label for="" class="label required">Select your Date Of Birth</label>
+									<div class="input-box">
+										<input type="text" id="applicant_dob" name="applicant_dob" class="input-text validate-dob required-entry" autocomplete="off">
+										<button type="button" id="yeslease-dob-select" data-bind="event:{click:showcalender}" class="ui-datepicker-trigger v-middle"><span>Select Date</span></button>
+									</div>							
+								</div>
+								<div class="field onepage-ssn">
+									<label for="" class="label required">Last four digits of SSN</label>
+									<div class="input-box pwd-icon-wrapper">
+										<input data-validate="{'required-entry':true}" id="applicant_lastfour_ssn" maxlength="4" data-bind="attr:{'value': ''}, event:{keypress:isNumber,click:fieldInit}" name="applicant_lastfour_ssn" type="password" class="input-text applicant_lastfour_ssn" autocomplete="off">
+										<div class="pwd-icon-checkout" data-bind="click:eyeclick">
+											<img id="yeslease-eye-icon" data-bind="attr:{'src':closeEyeImage}"/>
+										</div>
+									</div>
+									<button id="VerifyLease" data-bind="event:{click:verify}" type="button" class="button">Verify</button>
+								</div>
+							</form>
+						</div>
+						<div class="onepage-yeslease-msg">
+
+							<p class="yeslease-err-msg">Please choose a different payment method or add/update your shopping cart</p>
+
+						</div>
+						
+						<div class="onepage-yeslease-clickhere">
+							<p class="yeslease-clickhere-msg">
+								<span id="forgetleaseid-content">Forgot Lease ID</span>? 
+								<a id="yl-click-here" value="verifylease" href="javascript:void(0)" data-bind="event:{click:clickhere}">Click here</a>
+							</p>
+						</div>
+						
+						<div class="onepage-yeslease-msg">
+
+							<p class="yeslease-succ-msg">Your payment method was verified successfully. You will be now directed to complete your checkout. Our representatives will contact you with instructions for completing your contracts.</p>
+
+						</div>
+						<div class="actions-toolbar">
+							<div class="primary">
+								<button class="action primary continue"
+										id="conns-progressive-continue" data-bind="event:{click:progressiveApproved}">
+									<span data-bind="i18n: 'Continue'"></span>
+								</button>
+							</div>
+						</div>
+						<div class="checkout-agreements-block">
+							<!-- ko foreach: $parent.getRegion('before-place-order') -->
+							<!-- ko template: getTemplate() --><!-- /ko -->
+							<!--/ko-->
+						</div>
+						<div class="actions-toolbar">
+							<div class="primary">
+								<button class="action primary continue"
+										id="conns-progressive-continue" data-bind="event:{click:progressiveApproved}">
+									<span data-bind="i18n: 'Continue'"></span>
+								</button>
+							</div>
+						</div>
+						<div class="actions-toolbar">
+							<div class="primary">
+								<button class="action primary checkout"
+										type="submit"
+										data-bind="
+											click: placeOrder,
+											attr: {title: $t('Place Order')},
+											css: {disabled: !isPlaceOrderActionAllowed()},
+											enable: (getCode() == isChecked())
+											"
+										style="display: none"
+										disabled>
+									<span data-bind="i18n: 'Place Order'"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+    </div>
+</div>

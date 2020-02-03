@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="buttons" xsi:type="array">
+            <item name="mass_bluedart_shipment" xsi:type="array">
+                <item name="name" xsi:type="string">mass_bluedart_shipment</item>
+                <item name="label" xsi:type="string" translate="true">Mass Blue Dart shipment</item>
+                <item name="class" xsi:type="string">primary mass_bluedart_shipment</item>
+            </item>     
+        </item>
+    </argument>
+     <container name="listing_top">
+        <massaction name="listing_massaction">
+            <action name="mass_waybill_cancellation">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">mass_waybill_cancellation</item>
+                        <item name="label" xsi:type="string" translate="true">Waybill Cancellation</item>
+                        <item name="url" xsi:type="url" path="shipment/index/waybillcancellation"/>
+                    </item>
+                </argument>
+            </action>
+        </massaction>
+    </container>
+</listing>

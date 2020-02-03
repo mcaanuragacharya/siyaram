@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma system
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="purpletree" translate="label" sortOrder="130">
+            <label>Purpletree</label>
+        </tab>
+        <section id="purpletree_rma" translate="label" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Returns</label>
+            <tab>purpletree</tab>
+            <resource>Purpletree_Rma::rma_configuration</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+              <field id="process_data" translate="label" type="password" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>License Key</label>
+					<comment>Get this from Module Developer</comment>	
+					 <backend_model>Purpletree\Rma\Model\Config\Backend\Processdata</backend_model>
+					<validate>required-entry</validate>
+					<depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+				<field id="process_data_field" translate="label" type="label" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>License Status</label>
+                </field>
+				<field id="defaultstatus" translate="label" sortOrder="4" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+					 <label>Default Return Status</label>
+					 <comment>This will be the default status for Order return</comment>
+					 <!-- source model which we created for drop down options -->
+					 <source_model>Purpletree\Rma\Model\Config\Source\Status</source_model>
+					 <depends>
+						<field id="enabled">1</field>
+                    </depends>
+				</field>
+				<field id="defaultresolution" translate="label" sortOrder="5" type="select" showInDefault="1" showInWebsite="0" showInStore="0">
+					 <label>Default Resolution</label>
+					 <comment>This will be the default resolution for Order return</comment>
+					 <!-- source model which we created for drop down options -->
+					 <source_model>Purpletree\Rma\Model\Config\Source\Resolution</source_model>
+					 <depends>
+						<field id="enabled">1</field>
+                    </depends>
+				</field>
+				<field id="day_completion" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Return Request Deadline</label>
+					<comment>Max. number of days after order completion, means shipped and delivered.</comment>	
+					<validate>required-entry</validate>
+					<depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+				<field id="terms" translate="label" type="editor" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Terms and Condition</label>
+					<frontend_model>Purpletree\Rma\Block\Adminhtml\System\Config\Editor</frontend_model>
+                </field>
+            </group>
+			<group id="order_status" translate="label" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Order Status</label>
+				<field id="pts_partial_return_initiated" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+				   <label>Partial Return Initiated Status</label>        
+				   <source_model>Purpletree\Rma\Model\Config\Source\ListMode</source_model>
+				   <comment>Select status which will be set on partial products return, this status will set when status of order return is set to received by admin.</comment>
+				</field>
+				<field id="pts_partial_return_completed" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+				   <label>Partial Return Completed Status</label>        
+				   <source_model>Purpletree\Rma\Model\Config\Source\ListMode</source_model>
+				   <comment>Select status which will be set on partial products return, this status will set when status of order return is set to completed by admin.</comment>
+				</field>
+				<field id="pts_full_return_initiated" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+				   <label>Full Return Initiated Status</label>        
+				   <source_model>Purpletree\Rma\Model\Config\Source\ListMode</source_model>
+				   <comment>Select status which will be set on all products return, this status will set when status of order return is set to received by admin.</comment>
+				</field>
+				<field id="pts_full_return_completed" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+				   <label>Full Return Completed Status</label>        
+				   <source_model>Purpletree\Rma\Model\Config\Source\ListMode</source_model>
+				   <comment>Select status which will be set on all products return, this status will set when status of order return is set to completed by admin.</comment>
+				</field>
+				
+			</group>
+			<group id="email_configuration" translate="label" sortOrder="19" showInDefault="1" showInWebsite="0" showInStore="0">
+				<label>Email Configuration</label>
+				<field id="emails_to_admin" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Admin Notification Emails</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment>Admin wants to receive emails.</comment>	
+                </field>
+				<field id="email_id" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Admin Email Address</label>
+					  <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+					  <depends>
+                        <field id="emails_to_admin">1</field>
+                    </depends>
+                </field>
+				<field id="admin_emails" translate="label" type="multiselect"
+                    sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Emails to Admin on different events</label>
+                    <source_model>Purpletree\Rma\Model\Config\Source\AdminEmails</source_model>
+					 <depends>
+                        <field id="emails_to_admin">1</field>
+                    </depends>
+                </field>
+				<field id="emails_to_customer" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Customer/Guest Notification Emails</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment>Customer/Guest wants to receive emails.</comment>	
+                </field>
+				<field id="customer_emails" translate="label" type="multiselect"
+                    sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Emails to Customer/Guest on different events</label>
+                    <source_model>Purpletree\Rma\Model\Config\Source\CustomerEmails</source_model>
+					<depends>
+                        <field id="emails_to_customer">1</field>
+                    </depends>
+                </field>
+			</group>
+				<group id="smsapi" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>SMS Configuration</label>
+                <field id="sms_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>SMS Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+				<field id="url_api" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                   <label>SMS API URL</label>
+                   <comment>Please enter the SMS API provided by sms provider,Note use these variable:-_MOB_(for mobile number), and _TEXT_(for SMS).
+				    </comment>
+				    <validate>required-entry</validate>
+				    <depends>
+                        <field id="sms_enabled">1</field>
+                    </depends>
+                </field>
+				<field id="sms_rma_initiate" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>SMS on Order Return Initiate</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					 <depends>
+                        <field id="sms_enabled">1</field>
+                    </depends>
+                </field>
+				<field id="sms_rma_initiate_template" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Order Return Initiate Template</label>
+					<comment>Note use these variable:-_NAME_(for Customer name),_ORDERID_(for Order id),_URL_  (for store url).</comment>
+					<depends>
+                        <field id="sms_rma_initiate">1</field>
+                    </depends>
+                </field>
+				<field id="sms_status_changed" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>SMS on Status Change</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					 <depends>
+                        <field id="sms_enabled">1</field>
+                    </depends>
+                </field>
+				<field id="sms_rma_status_change_template" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Status Change Template</label>
+					<comment>Note use these variable:-_NAME_(for Customer name),_ORDERID_(for Order id),_STATUS_(for Status), _URL_  (for store url).</comment>
+					<depends>
+                        <field id="sms_status_changed">1</field>
+                    </depends>
+                </field>
+				<field id="sms_rma_comment" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>SMS on Message added by admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					 <depends>
+                        <field id="sms_enabled">1</field>
+                    </depends>
+                </field>
+				<field id="sms_rma_comment_template" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Comment Template</label>
+					<comment>Note use these variable:-_NAME_(for Customer name),_ORDERID_(for Order id),_URL_  (for store url).</comment>
+					<depends>
+                        <field id="sms_rma_comment">1</field>
+                    </depends>
+                </field>
+				<field id="live_validate_text" translate="label" type="hidden" sortOrder="8" showInDefault="0" showInWebsite="0" showInStore="0">
+					 <frontend_model>Purpletree\Rma\Block\System\Config\Form\Field\Disable</frontend_model>
+                </field>
+				<field id="encypt_text" translate="label" type="hidden" sortOrder="9" showInDefault="0" showInWebsite="0" showInStore="0">
+					 <frontend_model>Purpletree\Rma\Block\System\Config\Form\Field\Disable</frontend_model>
+                </field>
+			 </group>
+        </section>
+    </system>
+</config>

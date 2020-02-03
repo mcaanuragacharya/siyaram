@@ -1,0 +1,71 @@
+/**
+* Purpletree_Helpdesk purpletree
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+* It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+*
+* @category    Purpletree
+* @package     Purpletree_Helpdesk
+* @author      Purpletree Infotech Private Limited
+* @copyright   Copyright (c) 2017
+* @license     https://www.purpletreesoftware.com/license.html
+*/
+.purpletree-orderreturn-box {padding:0px 10px 0px 0px; margin-bottom:15px;}
+.purpletree-orderreturn-msg-box {
+    background: #ffffff;
+    border: 1px solid #dad1c8;
+    box-shadow: 0 2px 1px 0 rgba(217, 210, 202, 0.5);
+    padding: 15px 30px;
+}
+.purpletree-orderreturn-sender span {color:#a2a19f;}
+.purpletree-orderreturn-desc {margin:20px 0;}
+.purpletree-orderreturn-status {font-weight:600; font-size:1.6rem;}
+.capitalizee {
+    text-transform:capitalize;
+}
+.orderreturnattachment p { margin-bottom:-5px;margin-top:10px;}
+.purpletree-orderreturn-ms textarea{padding:10px; width:99%;}
+.pts-mark-completed {
+    background: #DFF2BF !important;
+    color: #4F8A10 !important;
+    border: 1px solid !important;
+}
+.pts-mark-received {
+    color: #31708f !important;
+    background: #d9edf7 !important;
+    border: 1px solid !important;
+}
+.purpletree-orderreturn-msg-box select {
+    min-width:130px;
+}
+.pts-return-status {
+    text-align:center;
+}
+.pts-return-status .purpletree-orderreturn-status {
+    color:#a94442;
+    background:#f2dede;
+    border: 1px solid !important;
+    padding: 10px 23px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.pts-return-status-2 {
+    color: #31708f !important;
+    background: #d9edf7 !important;
+}
+.pts-credit-memo {
+    background: green !important;
+    color: #fff !important;
+}
+.pts-return-status-3 {
+    background: #DFF2BF !important;
+    color: #4F8A10 !important;
+    border: 1px solid !important;
+}
+.adminmail {
+    text-transform:capitalize;
+}
+.margibotomm {
+    margin-bottom:7px;
+}

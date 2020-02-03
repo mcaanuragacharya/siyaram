@@ -1,0 +1,51 @@
+2019-08-21T06:12:55+00:00 INFO (6): Starting to updating Configurable Products with sku -BP24400F40
+2019-08-21T06:12:59+00:00 INFO (6): Now we are inside updateConfigurableProduct
+2019-08-21T06:13:02+00:00 INFO (6): Loaded Product id 964
+2019-08-21T06:13:04+00:00 INFO (6): Loaded Product
+2019-08-21T06:13:04+00:00 INFO (6): Updated Name
+2019-08-21T06:13:04+00:00 INFO (6): Updated Weight
+2019-08-21T06:13:04+00:00 INFO (6): Updated Price
+2019-08-21T06:13:04+00:00 INFO (6): Updated Special Price
+2019-08-21T06:13:04+00:00 INFO (6): Updated Special Price Date From
+2019-08-21T06:13:04+00:00 INFO (6): Updated Special Price Date Too
+2019-08-21T06:13:04+00:00 INFO (6): Updated Meta Title
+2019-08-21T06:13:04+00:00 INFO (6): Updated Meta Keywords
+2019-08-21T06:13:04+00:00 INFO (6): Updated Meta Desc
+2019-08-21T06:13:04+00:00 INFO (6): Updated DESC
+2019-08-21T06:13:04+00:00 INFO (6): Updated Short Desc
+2019-08-21T06:13:04+00:00 INFO (6): Updated Data
+2019-08-21T06:13:04+00:00 INFO (6): Updated Category
+2019-08-21T06:13:04+00:00 INFO (6): Updated Quantity
+2019-08-21T06:13:04+00:00 INFO (6): Started Saved Basic Details
+2019-08-21T06:13:04+00:00 INFO (6): Ended Saved Basic Details
+2019-08-21T06:13:04+00:00 INFO (6): Has Images in csv
+2019-08-21T06:13:04+00:00 INFO (6): Images count are 6
+2019-08-21T06:13:06+00:00 INFO (6): Image Uploading Function Started saveImagesForProduct.
+2019-08-21T06:13:07+00:00 INFO (6): Image Uploading Started.
+2019-08-21T06:13:08+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f401.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f401.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Upload Error-The image content is not valid.
+2019-08-21T06:13:08+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f401.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f402.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f402.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Added
+2019-08-21T06:13:08+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f402.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f403.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f403.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Added
+2019-08-21T06:13:08+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f403.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f404.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f404.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Added
+2019-08-21T06:13:08+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f404.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f405.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f405.jpg
+2019-08-21T06:13:08+00:00 INFO (6): Image Added
+2019-08-21T06:13:09+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f405.jpg
+2019-08-21T06:13:09+00:00 INFO (6): Start Uploading Image-/var/www/html/pub/media/importimages/bp24400f406.jpg
+2019-08-21T06:13:09+00:00 INFO (6): Image Exist-/var/www/html/pub/media/importimages/bp24400f406.jpg
+2019-08-21T06:13:09+00:00 INFO (6): Image Added
+2019-08-21T06:13:09+00:00 INFO (6): End Uploading Image-/var/www/html/pub/media/importimages/bp24400f406.jpg
+2019-08-21T06:13:09+00:00 INFO (6): Image Uploading Ended.
+2019-08-21T06:13:09+00:00 INFO (6): Updated Images
+2019-08-21T06:13:09+00:00 INFO (6): Ending to add Configurable Products with sku -BP24400F40

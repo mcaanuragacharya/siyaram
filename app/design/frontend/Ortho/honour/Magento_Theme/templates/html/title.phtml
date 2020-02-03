@@ -1,0 +1,89 @@
+<?php
+    /**
+    * Copyright © 2016 Magento. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+
+    // @codingStandardsIgnoreFile
+
+    /**
+    * @var $block \Magento\Theme\Block\Html\Title
+    */
+    $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
+    $title = '';
+    if (trim($block->getPageHeading())) {
+        $title = '<span class="base" data-ui-id="page-title-wrapper" ' .  $block->getAddBaseAttribute() . '>'
+        . $block->escapeHtml($block->getPageHeading()) . '</span>';
+    }
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $requestInterface = $objectManager->get('Magento\Framework\App\RequestInterface');
+
+    $routeName      = $requestInterface->getRouteName();
+    $moduleName     = $requestInterface->getModuleName(); 
+    $controllerName = $requestInterface->getControllerName(); 
+    $actionName     = $requestInterface->getActionName();
+    //echo 'R-'.$routeName.'-M-'.$moduleName.'-C-'.$controllerName.'-A-'.$actionName;
+    if($routeName=='checkout' && $moduleName=='checkout' && $controllerName=='onepage' && $actionName=='success'){}
+    else if($routeName=='catalog' && $moduleName=='catalog' && $controllerName=='category' && $actionName=='view'){
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');//get current category
+            if ($title): ?>
+            <div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $cssClass; ?>" 
+            <?php if ($category->getImageUrl()){?>style="background-image:url(<?php echo $category->getImageUrl();?>) !important;"<?php }?>>
+            <h1 class="page-title"
+            <?php if ($block->getId()): ?> id="<?php /* @escapeNotVerified */ echo $block->getId();?>" <?php endif; ?>
+                <?php if ($block->getAddBaseAttributeAria()): ?>
+                    aria-labelledby="<?php /* @escapeNotVerified */ echo $block->getAddBaseAttributeAria(); ?>"
+                    <?php endif; ?>>
+                <?php /* @escapeNotVerified */ echo $title ?>
+                </h1>
+                <?php echo $block->getChildHtml(); ?>
+                </div>
+                <?php endif; 
+        }
+        else if($routeName=='catalog' && $moduleName=='catalog' && $controllerName=='product' && $actionName=='view'){
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');//get current product
+            $productRepository = $objectManager->get('\Magento\Catalog\Model\ProductRepository');
+            $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+            $product = $productRepository->getById($product->getId());
+            $categoryIds = $product->getCategoryIds();
+            $catImg = '';
+            for($i=0;$i<count($categoryIds);$i++) {
+                $categoryData = $objectManager->create('Magento\Catalog\Model\Category')
+                ->setProductStoreId(1)->load($categoryIds[$i]);
+                if($categoryData->getImageUrl()!='')
+                    $catImg = $categoryData->getImageUrl();
+        }
+        if ($title): ?>
+        <div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $cssClass; ?>" 
+        <?php if ($catImg!=''){?>style="background-image:url(<?php echo $catImg;?>) !important;"<?php }?>>
+        <h1 class="page-title"
+        <?php if ($block->getId()): ?> id="<?php /* @escapeNotVerified */ echo $block->getId();?>" <?php endif; ?>
+        <?php if ($block->getAddBaseAttributeAria()): ?>
+            aria-labelledby="<?php /* @escapeNotVerified */ echo $block->getAddBaseAttributeAria(); ?>"
+            <?php endif; ?>>
+        <?php /* @escapeNotVerified */ echo $title ?>
+        </h1>
+            <?php echo $block->getChildHtml(); ?>
+            </div>
+            <?php endif;
+        }
+        else
+        {
+    ?>
+
+    <?php if ($title): ?>
+        <div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $cssClass; ?>">
+        <h1 class="page-title"
+        <?php if ($block->getId()): ?> id="<?php /* @escapeNotVerified */ echo $block->getId();?>" <?php endif; ?>
+        <?php if ($block->getAddBaseAttributeAria()): ?>
+            aria-labelledby="<?php /* @escapeNotVerified */ echo $block->getAddBaseAttributeAria(); ?>"
+            <?php endif; ?>>
+        <?php /* @escapeNotVerified */ echo $title ?>
+        </h1>
+        <?php echo $block->getChildHtml(); ?>
+        </div>
+            <?php endif; ?>
+        <?php }?>
+    <style>.category-view {display:none;}</style>

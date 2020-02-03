@@ -1,0 +1,12 @@
+<div class="product product-custom-block">
+<?php 
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $product = $objectManager->create('Magento\Catalog\Model\Product')->setStoreId(0)->load($product->getId());
+    //get current product
+   // echo $product->getId();
+    echo ($product->getMetaDescription());	
+    //echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('product_custom_tab')->toHtml();
+?>
+</div>

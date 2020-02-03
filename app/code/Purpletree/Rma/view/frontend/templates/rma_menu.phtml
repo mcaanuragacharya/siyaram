@@ -1,0 +1,33 @@
+<!--
+/**
+ * Purpletree_Rma rma_menu
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+ 
+<?php
+$currentUrl = $this->getCurrentUrl();
+$moduleEnabled = $this->isModuleEnabled();
+	if($moduleEnabled){ ?>
+		<li class="nav item <?php echo ($currentUrl =='returns')? "current":"";?>">
+		<?php 
+		if($currentUrl == 'returns'){ ?>     
+				<strong><?php echo __('My Returns') ?></strong>              
+			<?php
+			} else{ ?>        
+				<a href="<?php echo $this->getUrl('rma'); ?>">
+					<?php echo __('My Returns') ?>
+				</a>                    
+			<?php 
+			} ?>
+		</li>
+	<?php } ?>

@@ -1,0 +1,120 @@
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('Bluedart_Shipment::js/jquery.validate.min.js'); ?>"></script>
+
+<script type="text/javascript">
+  jQuery.noConflict();
+  jQuery(document).ready(function() {
+    jQuery.validator.addMethod("lettersonly", function(value, element) {
+    return this.optional(element) || /^[a-z]+$/i.test(value);
+  }, "Please enter valid alphabets only."); 
+
+  jQuery("#pincodevalidation").validate({
+      rules: {
+        pincode: {required : true,minlength: 6,number: true},
+        productcode: { lettersonly: true },
+        subproduct: { lettersonly: true },
+      },messages:{
+        pincode: {minlength: "Please enter at least 6 digits."}
+      }
+    });
+  });
+
+jQuery.validator.setDefaults({
+  submitHandler: function() {
+    jQuery('#pincodevalidmessage').hide();
+    jQuery('#ajax-loader').show();
+      jQuery.ajax({
+            type: "POST",
+            url: "<?php echo $this->getUrl('shipment/index/pincodefindervalidate'); ?>",
+            data: { 'pincode' : jQuery('#pincode').val() ,'productcode' : jQuery('#productcode').val(),'subproduct' : jQuery('#subproduct').val() },
+            success: function(data){
+            if(data != ''){
+              jQuery('#ajax-loader').hide();
+              jQuery('#pincodevalidmessage').show();
+              jQuery('#pincodevalidmessage').html(data);
+            }
+        }
+      });
+    }
+});
+function resetForm() {
+  jQuery('#pincodevalidmessage').html('');
+  jQuery("#pincodevalidation").validate().resetForm();
+}
+</script>
+<form  name="pincodevalidation" id = "pincodevalidation" novalidate="novalidate">
+  <div class="pincode">
+  <h3>Pincode Finder :</h3>
+  <span>Pincode </span><span class="required">*</span>:&nbsp;&nbsp;
+  <input size="7" maxlength="6" type="text" id="pincode" name="pincode" ></input><br/>
+  <span>Product Code </span><span class="required"></span>:&nbsp;&nbsp;
+  <input size="2" maxlength="1" type="text" id="productcode" style="text-transform: uppercase;" name="productcode"></input>
+  <br/>
+  <span>Sub Product Code</span><span class="required"></span>:&nbsp;&nbsp;
+  <input size="2" maxlength="1" type="text" id="subproduct" style="text-transform: uppercase;" name="subproduct"></input>
+  <br/>
+  <button class="go_button1" type="submit">GO</button>
+  <button class="go_button" type="button" onclick="reset();resetForm();">Reset</button><br/>
+  <div id="ajax-loader" style="display:none;margin:2% 0 0 15%;">
+    <img src="<?php echo $this->getViewFileUrl('Bluedart_Shipment::images/ajax-loader.gif'); ?>">
+  </div>
+  <div id = "pincodevalidmessage" class = "pincodevalidmessage"></div>
+</form>
+
+<style type="text/css">
+  .divTable
+  {
+    display:  table;
+    width:auto;
+    background-color:#eee;
+    border:1px solid  #666666;
+    border-spacing:5px;margin:10px 0 0;/*cellspacing:poor IE support for  this*/
+   /* border-collapse:separate;*/
+   width: 100%;
+  }
+  .divRow
+  {
+     display:table-row;
+     width:auto;
+  }
+  .divCell
+  {
+        float:left;/*fix for  buggy browsers*/
+        display:table-column;
+        background-color:#ccc;
+  }
+  .pincode, .pincodes{width: 100%;}
+  .pincode span,.pincodes p span{
+	  width:14%;
+		float:left;
+		display:block;
+		margin:5px 0px 0px 0;
+		text-align:right;
+	}
+  .pincodes p{overflow: auto;margin: 0;padding: 0 5px;}
+	.pincodes p span{width: 16%;
+		height:18px;
+		text-align:left;
+		margin:5px 0;
+	}
+	.pincode input{margin: 5px 10px 5px 0;}
+	.pincode .go_button{margin: 0 0 0 7.8%;}
+  .pincodes p:nth-child(odd) {
+    background: #FEFEFE;}
+  .pincodes p:nth-child(even) {
+    background: #CDE0F1;}
+  .pincode span.required{color:#F00;float:left;margin:7px 10px 0 2px;font-weight: bold;width:0.5%;}
+  .divTable1, .divTable2, .divTable3, .divTable4 {display: table;
+        background-color:#eee;
+        border:1px solid  #666666;
+        border-spacing:5px;margin:10px 5px 0;/*cellspacing:poor IE support for  this*/
+       /* border-collapse:separate;*/
+       width: 49%;float: left;}
+  .headRow1 .pincodes p span{width: 33%; float: left;}
+  .headRow2 .pincodes p span{width: 49%; float: left;}
+  .headRow3 .pincodes p span{width: 49%; float: left;}
+  .headRow4 .pincodes p span{width: 49%; float: left;}
+  .pincodes p:first-child {background: #0F6FC6;color: #fff;}
+  .pincode .go_button1{margin: 0 0 0 11.3%;}
+  .pincode .go_button{margin: 0 0 0 1%;}
+  .pincodes span.error_msg{font-weight: bold;color: #D40707;}
+</style>

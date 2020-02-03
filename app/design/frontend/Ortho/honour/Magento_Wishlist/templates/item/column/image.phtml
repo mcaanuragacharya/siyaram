@@ -1,0 +1,36 @@
+<?php
+    /**
+    * Copyright © Magento, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+
+    // @codingStandardsIgnoreFile
+
+    /** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image $block */
+
+    /** @var \Magento\Wishlist\Model\Item $item */
+    $item = $block->getItem();
+    $product = $item->getProduct();
+    $image = 'new_products_content_widget_grid';
+    $hoverimage = 'homepage_product_hover_carousel';
+?>
+<div class="product-grid-image">
+    <div class="product-image-change">
+        <a href="<?php /* @escapeNotVerified */  echo $block->getProductUrl($item) ?>" class="product photo product-item-photo" tabindex="-1">
+            <div class="normal-image">
+                <?php echo $block->getImage($product, $image)->toHtml(); ?>
+            </div>
+            <div class="hover-image">
+                <?php echo $block->getImage($product, $hoverimage)->toHtml(); ?>
+            </div>                    
+        </a>
+    </div>
+    <div class="product-item-inner product-hover-inner">
+    </div>
+</div>
+<!--<a class="product-item-photo" tabindex="-1" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+<?= $block->getImage($product, 'wishlist_thumbnail')->toHtml() ?>
+</a>-->
+
+
+

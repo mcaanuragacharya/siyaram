@@ -1,0 +1,143 @@
+/**
+ * Purpletree_Rma purpletree_rma
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+.purpletree-orderreturn-box {
+    padding:0px 10px 0px 0px;
+    margin-bottom:15px;
+    }
+.purpletree-orderreturn-msg-box {
+    background: #ffffff;
+    border: 1px solid #dad1c8;
+    box-shadow: 0 2px 1px 0 rgba(217, 210, 202, 0.5);
+    padding: 15px 30px;
+}
+.purpletree-orderreturn-sender span {
+    color:#a2a19f;
+    }
+.purpletree-orderreturn-desc {
+    margin:20px 0;
+    }
+.purpletree-orderreturn-status {
+    font-weight:600;
+    font-size:1.6rem;
+    }
+.admin__data-grid-loading-mask {
+    display: none;
+    position:fixed;
+    }
+.admin__data-grid-loading-mask {
+    display: none;
+    position:fixed;
+    }
+.subjecttitle{
+    font-size:22px;
+    }
+.item-subject {
+    margin-bottom: 14px;
+    }
+.field.attachment p {
+    margin-bottom:-20px;
+    margin-top:10px;
+}
+.orderreturnattachment p {
+    margin-bottom:-5px;
+    margin-top:10px;
+    }
+.capitalizee {
+    text-transform:capitalize;
+    }
+.message.info.empty.noorderreturns {
+    margin-top:20px;
+    }
+.SelectptsItem {
+    text-align: center;
+    vertical-align: middle;
+}
+.pts-img-conta span {
+    padding-bottom: 100%;
+}
+.pts-img-conta {
+    width:120px;
+}
+.return-order-form {
+    float:right;
+}
+.returnstatusbtn {
+    box-shadow: inset 0 1px 0 0 #ffffff, inset 0 -1px 0 0 rgba(204, 204, 204, 0.3);
+    border-radius: 3px;
+    background-image: none;
+    background: #eeeeee;
+    border: 1px solid #cccccc;
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    margin: 0;
+    padding: 7px 15px;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+    float:right
+}
+.pts-terms-checkbox {
+    margin-bottom:20px;
+}
+.pts-return-status .purpletree-orderreturn-status {
+    color:#a94442;
+    background:#f2dede;
+    border: 1px solid !important;
+    padding: 10px 23px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.pts-return-status-2 {
+    color: #31708f !important;
+    background: #d9edf7 !important;
+}
+.pts-return-status-3,.pts-credit-memo {
+    background: #DFF2BF !important;
+    color: #4F8A10 !important;
+    border: 1px solid !important;
+}
+.pts-return-status {
+    text-align:center;
+}
+.adminmail {
+    text-transform:capitalize;
+}
+.pts-front-loader {
+    background: rgba(255,255,255,0.5);
+    background-image: url('../css/images/loading_spinner.gif');
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:70px;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 399;
+}
+@media only screen and (min-width: 703px) {
+    .leftdiv {
+        width:70%;
+        float:left;
+        }
+    .rightdiv {
+        width:28%;
+        float:right;
+        }
+}
+

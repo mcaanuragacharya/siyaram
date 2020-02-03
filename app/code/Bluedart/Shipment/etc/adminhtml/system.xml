@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="bluedart" translate="label" sortOrder="300">
+            <label>Bluedart</label>
+        </tab>
+        <section id="bluedart" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<label>BlueDart Configuration</label>
+            <tab>bluedart</tab>
+            <!-- resource tag name which we have to defined in the acl.xml -->
+            <resource>Bluedart_Shipping::bluedart</resource>
+            <group id="settings" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Client Information</label>
+                <!-- <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field> -->
+                <field id="api_type" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Api Type *</label>
+                    <validate>required-entry validate-length maximum-length-1</validate>
+                    <comment>Valid values T/S. Enter "T" for all API</comment>
+                </field>
+                <field id="api_type1" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Api Type *</label>
+                    <validate>required-entry validate-length maximum-length-1</validate>
+                    <comment>Valid values T/S. Enter "S" for pickupregistration and Waybill Generation, Cancellation API, etc</comment>
+                </field>
+                <field id="area" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Area *</label>
+                    <validate>required-entry validate-length maximum-length-3</validate>
+                    <comment>Enter 3 digit Area code e.g. BOM</comment>
+                </field>
+                <field id="customercode" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Code *</label>
+                    <validate>required-entry validate-length maximum-length-6</validate>
+                    <comment>Enter 6 digit Area code e.g. 099960</comment>
+                </field>
+                <field id="licencekey" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Licence Key *</label>
+                    <validate>required-entry validate-length maximum-length-2000</validate>
+                    <comment>Enter Licence Key e.g. 4ecbd06dc0b9737d69120029cb05c9df</comment>
+                </field>
+                <field id="licencekey_fortracking" translate="label" type="text" sortOrder="4.5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Licence Key (Tracking) *</label>
+                    <validate>required-entry validate-length maximum-length-2000</validate>
+                    <comment>Enter license key for Tracking, If you don't have different then add value same as above.</comment>
+                </field>
+                <field id="loginid" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>LoginID *</label>
+                    <validate>required-entry validate-length maximum-length-30</validate>
+                    <comment>Enter Login ID of client e.g. BOM00001</comment>
+                </field>
+                <field id="password" translate="label" type="password" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Password (if not then keep it blank)</label>
+                </field>
+                <field id="version" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Version *</label>
+                    <validate>required-entry validate-length maximum-length-5</validate>
+                    <comment>Enter Version e.g. 1.3</comment>
+                </field>
+                <field id="client_name" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Name *</label>
+                    <validate>required-entry validate-length maximum-length-30</validate>
+                    <comment>Enter Client Name</comment>
+                </field>
+                <field id="client_address1" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Address 1 *</label>
+                    <validate>required-entry validate-length maximum-length-30</validate>
+                    <comment>Enter Client Address 1</comment>
+                </field>
+                <field id="client_address2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Address 2</label>
+                    <validate>validate-length maximum-length-30</validate>
+                    <comment>Enter Client Address 2</comment>
+                </field>
+                <field id="client_address3" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Address 3</label>
+                    <validate>validate-length maximum-length-30</validate>
+                    <comment>Enter Client Address 3</comment>
+                </field>
+                <field id="client_pincode" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Pincode *</label>
+                    <validate>required-entry validate-length maximum-length-6</validate>
+                    <comment>Enter 6 digit Client Pincode</comment>
+                </field>
+                <field id="client_mobile" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Mobile</label>
+                    <validate>validate-length maximum-length-10</validate>
+                    <comment>Enter Client Mobile</comment>
+                </field>
+                <field id="client_telephone" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Telephone</label>
+                    <validate>validate-length maximum-length-15 minimum-length-6</validate>
+                    <comment>Enter Client Telephone</comment>
+                </field>
+                <field id="client_email" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Email</label>
+                    <validate>validate-length maximum-length-30 validate-email</validate>
+                    <comment>Enter Client Email</comment>
+                </field>
+                <field id="client_vendorcode" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Vendorcode</label>
+                    <validate>validate-length maximum-length-6</validate>
+                    <comment>Enter Client Vendorcode</comment>
+                </field>
+                <field id="client_latitude" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Latitude</label>
+                    <validate>validate-length maximum-length-20</validate>
+                    <comment>Enter Client Latitude</comment>
+                </field>
+                <field id="client_longitude" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Longitude </label>
+                    <validate>validate-length maximum-length-20</validate>
+                    <comment>Enter Client Longitude</comment>
+                </field>
+                <field id="client_addressinfo" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Addressinfo</label>
+                    <validate>validate-length maximum-length-50</validate>
+                    <comment>Enter Client Addressinfo</comment>
+                </field>
+            </group>
+            <group id="url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>API URL</label>
+                <field id="servicefinder" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Service Finder *</label>
+                    <validate>required-entry</validate>
+                    <comment>http://netconnect.bluedart.com/Ver1.8/Demo/ShippingAPI/Finder/ServiceFinderQuery.svc</comment>
+                </field>
+                <field id="waybillgeneration" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Way Bill Generation *</label>
+                    <validate>required-entry</validate>
+                    <comment>http://netconnect.bluedart.com/Ver1.8/Demo/ShippingAPI/WayBill/WayBillGeneration.svc</comment>
+                </field>
+                <field id="pickupregistrationservice" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pickup Registration Service *</label>
+                    <validate>required-entry</validate>
+                    <comment>http://netconnect.bluedart.com/Ver1.8/Demo/ShippingAPI/Pickup/PickupRegistrationService.svc</comment>
+                </field>
+            </group>
+        </section>
+        <section id="carriers" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+        	<group id="bluedart" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Bluedart</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Method Name</label>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+                <field id="price" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Price</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sort Order</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

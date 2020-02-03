@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma di
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+ <type name="Magento\Sales\Block\Order\Recent">
+        <plugin name="customer_account_dashboard_hello_override" type="Purpletree\Rma\Plugin\Order\Recent" />
+    </type>
+    <virtualType name="PurpletreeRmaGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+	<!--Resolution Starts-->
+    <virtualType name="PurpletreeRmaResolutionGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Purpletree\Rma\Model\ResourceModel\Resolution\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PurpletreeRmaGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Purpletree\Rma\Model\ResourceModel\Resolution\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">purpletree_rma_resolution</argument>
+            <argument name="eventPrefix" xsi:type="string">purpletree_rma_resolution_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">resolution_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Resolution</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="purpletree_rma_resolution_listing_data_source" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Resolution\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+	<!--Resolution Ends-->
+		<!--Status Starts-->
+    <virtualType name="PurpletreeRmaStatusGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Purpletree\Rma\Model\ResourceModel\Status\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PurpletreeRmaGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Purpletree\Rma\Model\ResourceModel\Status\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">purpletree_rma_status</argument>
+            <argument name="eventPrefix" xsi:type="string">purpletree_rma_status_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">status_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Status</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="purpletree_rma_status_listing_data_source" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Status\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+	<!--Status Ends-->
+	<!--Reason Starts-->
+    <virtualType name="PurpletreeRmaReasonGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Purpletree\Rma\Model\ResourceModel\Reason\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PurpletreeRmaGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Purpletree\Rma\Model\ResourceModel\Reason\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">purpletree_rma_reason</argument>
+            <argument name="eventPrefix" xsi:type="string">purpletree_rma_reason_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">reason_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Reason</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="purpletree_rma_reason_listing_data_source" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Reason\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+	<!--Reason Ends-->
+	<!--Package Condition Starts-->
+    <virtualType name="PurpletreeRmaPackageconditionGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Purpletree\Rma\Model\ResourceModel\Packagecondition\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PurpletreeRmaGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Purpletree\Rma\Model\ResourceModel\Packagecondition\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">purpletree_rma_packagecondition</argument>
+            <argument name="eventPrefix" xsi:type="string">purpletree_rma_packagecondition_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">packagecondition_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Packagecondition</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="purpletree_rma_packagecondition_listing_data_source" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Packagecondition\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+	<!--Package Condition Ends-->
+   <!--Order Return Condition Starts-->
+    <virtualType name="PurpletreeRmaOrderreturnGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Purpletree\Rma\Model\ResourceModel\Orderreturn\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PurpletreeRmaGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Purpletree\Rma\Model\ResourceModel\Orderreturn\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">purpletree_rma_orderreturn</argument>
+            <argument name="eventPrefix" xsi:type="string">purpletree_rma_orderreturn_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">orderreturn_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Orderreturn</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="purpletree_rma_orderreturn_listing_data_source" xsi:type="string">Purpletree\Rma\Model\ResourceModel\Orderreturn\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+	<!--Order Return Condition Ends-->
+</config>

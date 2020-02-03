@@ -1,0 +1,140 @@
+<?php 
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+    $url = $storeManager->getStore()->getBaseUrl();
+    $admin_base_url = $objectManager->create('Magento\Backend\Helper\Data')->getHomePageUrl();
+?>
+<img src="<?php echo $url.'/importdata/loader.gif';?>" id="loader" style="display:none;" />
+<div class="page-main-actions">    
+    <div class="page-actions-placeholder"></div>
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner" data-title="Orders">
+            <div class="page-actions-buttons">
+                <input type="hidden" name="baseurl" id="baseurl" value="<?php echo $url;?>"/>
+                <input type="hidden" name="salesurl" id="salesurl" value="<?php echo $url.'admin/sales/order/index';?>"/>
+                <button id="add" title="Create New Order" type="button" 
+                    class="action- scalable primary importcategories" 
+                    data-ui-id="add-button">
+                    <span>Import Categories</span>
+                </button>
+            </div>
+            <div class="page-actions-buttons">
+                <button id="add" title="Create New Order" type="button" 
+                    class="action- scalable primary importproducts" 
+                    data-ui-id="add-button">
+                    <span>Import Products</span>
+                </button>
+            </div>
+            <div class="page-actions-buttons">
+                <button id="add" title="Create New Order" type="button" 
+                    class="action- scalable primary exportorders" 
+                    data-ui-id="add-button">
+                    <span>Export Orders</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    ////////////////////Import Products//////////////////////////
+    jQuery('.importproducts').click(function(){
+        jQuery('#loader').show();
+       // insertSimpleProduct(1121); 
+       insertConfigProduct(874);
+    });
+    function insertSimpleProduct(id){  
+        if(id>=0){
+            jQuery.ajax({
+                url: jQuery('#baseurl').val()+"importdata/ajax.php",
+                type: "post",
+                data: {id : id,ptype:'SIMPLE'},
+                success : function(data){
+                    if(data=='111111'){
+                        alert("Json file is incorret or No data available in Json");
+                        return false;
+                    }
+                    if(data!=''){
+                        var impDData = data.split("@@");
+                        txt = '<tr><td>'+impDData[0]+'</td><td>Imported</td></tr>';
+                        //jQuery('.productgrid').append(txt);
+                        insertSimpleProduct(impDData[1]);    
+                    } else {    
+                        insertConfigProduct(0);
+                        jQuery('#loader').hide(); 
+                        return; 
+                    }
+                }
+            });
+        } else { 
+            return; 
+        }
+    }
+    function insertConfigProduct(id){
+        if(id>=0){                 
+            jQuery.ajax({
+                url: jQuery('#baseurl').val()+"importdata/ajax.php",
+                type: "post",
+                data: {id : id,ptype:'CONFIG'},
+                success : function(data){
+                    if(data!=''){
+
+                        var impDData = data.split("@@");
+                        txt = '<tr><td>'+impDData[0]+'</td><td>Imported</td></tr>';
+                        //jQuery('.productgrid').append(txt);
+                        insertConfigProduct(impDData[1]);    
+                    } else {    
+                        jQuery('#loader').hide();    
+                        alert("Imported Successfully");
+                        return;
+                    }
+                }
+            });
+        } else {
+            jQuery('#loader').hide();    
+            return; 
+        }
+    }
+    ////////////////////Import Categories//////////////////////////
+    jQuery('.importcategories').click(function(){
+        jQuery('#loader').show();
+        insertCategory(0); 
+    });
+    function insertCategory(id){  
+        if(id>=0){
+            jQuery.ajax({
+                url: jQuery('#baseurl').val()+"importdata/categoryajax.php",
+                type: "post",
+                data: {id : id},
+                success : function(data){
+                    if(data!=''){
+                        var impDData = data.split("@@");
+                        txt = '<tr><td>'+impDData[0]+'</td><td>Imported</td></tr>';
+                        //jQuery('.categorygrid').append(txt);
+                        insertCategory(impDData[1]);    
+                    } else {
+                        jQuery('#loader').hide();
+                        alert("Imported Successfully");
+                    }
+                }
+            });
+        } else {
+            return; 
+        }
+    }
+    /////////////////Export Orders/////////////////////////////////
+    jQuery('.exportorders').click(function(){
+        jQuery('#loader').show();
+        orderExport(); 
+    });
+    function orderExport(){  
+        jQuery.ajax({
+            url: jQuery('#baseurl').val()+"importdata/ajaxorder.php",
+            type: "post",
+            success : function(data){
+                jQuery('#loader').hide();
+                window.location.href = jQuery('#baseurl').val()+"importdata/exportorder.csv";
+                return; 
+            }
+        });
+    }
+    </script>

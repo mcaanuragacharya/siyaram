@@ -1,0 +1,45 @@
+<!--
+/**
+ * Purpletree_Rma status_change_email
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<!--@subject Order Return New Message  @-->
+ 
+{{template config_path="design/email/header_template"}} <!-- pathe of template header-->
+
+<!-- you can Modify content of template according to your requirement-->
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Dear %customer_name," customer_name=$customer_name}}</p>
+            <p>
+                {{trans "New Message Received."}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-summary">
+        <td>
+            <h1>{{trans 'Your Return Request for order ID <span class="no-link">#%order_id</span>' order_id=$order_id |raw}}</h1>
+            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$created_date |raw}}</p>
+        </td>
+    </tr>
+    <tr class="email-information">
+         <p>{{trans 'Admin added new message to your request'}}</p>
+		 <p>{{trans '%short_message' short_message=$short_message |raw}}</p>
+		 <p>{{trans 'Login to your account to view Full message %customer_link' customer_link=$customer_link |raw}}</p>
+		 <p>{{trans "Sincerely,"}}</p>
+		<p>{{var adminName}}</p>
+    </tr>
+</table>
+ 
+{{template config_path="design/email/footer_template"}} <!--footer of template-->

@@ -1,0 +1,215 @@
+<?php
+/**
+ * Purpletree_Rma return_order_view
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+
+$orderreturn = $this->getOrderreturn();
+?>
+<div class="purpletree-orderreturn-container">
+<div data-role="spinner" class="pts-front-loader" style="position: fixed;display:none;">
+</div>
+	<div class="row">
+		<div class="rightdiv">
+			<div class="purpletree-orderreturn-right">
+				<div class="item-subject">
+					<div class="subjecttitle"><?php echo __('Order Return Information') ?></div>
+				</div>
+				<div class="pts-return-status">
+					<div class="purpletree-orderreturn-status pts-return-status-<?php echo $orderreturn->getPtsStatusId(); ?>">
+						<?php echo $this->getOrderreturnStatus($orderreturn->getPtsStatusId()); ?>
+					</div>
+				</div>
+				<div class="purpletree-orderreturn-msg-box">
+					<p><strong><?php echo __('Created at: ') ?></strong><?php echo date('F j, Y G:i A', strtotime($orderreturn->getPtsCreatedAt())) ?></p>
+					<p><strong><?php echo __('Order ID: ') ?></strong> 
+					<?php if($this->getCustomer() == 'loggedIn') { ?>
+					<a href="<?php echo $this->getUrl('sales/order/view',['order_id' => $this->getOrderidfromIncrementId()->getId()]) ?>"> <?php echo '#'.$orderreturn->getPtsOrderId() ?></a>
+					<?php } else { ?>
+					<?php echo '#'.$orderreturn->getPtsOrderId() ?>
+					<?php } ?>
+					</p>
+					<p><strong><?php echo __('Resolution: ') ?></strong><span class="purpletree-orderreturn-resolution"> <?php echo $this->getOrderreturnResolution($orderreturn->getPtsResolutionId()) ?></span></p>
+					<p><strong><?php echo __('Reason: ') ?></strong> <?php echo $this->getOrderreturnReason($orderreturn->getPtsReasonId()) ?></p>
+					<p><strong><?php echo __('Package Condition: ') ?></strong> <?php echo $this->getOrderreturnPackageCondition($orderreturn->getPtsPackageconditionId()) ?></p>
+				</div>
+				<br />
+			</div>
+		</div>
+		<div class="leftdiv">
+			<div class="item-subject">
+				<span class="subjecttitle"><?php echo __('Messages') ?></span>
+			</div>
+			<div class="chatbox">
+				<div class="purpletree-orderreturn-left" data-role="pannel" data-mage-init='{"loaderAjax": {}, "loader": {}}'>
+					<?php $count =0; ?>
+				<?php foreach($this->getMessage() as $message): ?>
+				<?php if(!empty($message->getPtsOrderreturnMessage ())): ?>
+				<?php $count++; ?>
+						<div class="purpletree-orderreturn-box boxx<?php echo $message->getPtsEntityId(); ?> bbx<?php echo $count; ?>">
+							<div class="purpletree-orderreturn-msg-box">
+								<div class="purpletree-orderreturn-sender">
+									<strong><span class="capitalizee"><?php echo $message->getPtsMessageSender()==0 ?__('Admin'):__('Customer') ?></strong>
+									<span><?php echo __('Replied at ') ?><?php echo date('F j, Y G:i A', strtotime($message->getPtsCreatedAt())) ?></span>
+								</div>
+								<strong>
+							<?php if($message->getPtsMessageSender() == 0){ ?>
+									
+								<?php } else {
+									echo $this->getCustomerEmail()['name'].' - '. $this->getCustomerEmail()['email'];
+								 } ?>
+							</strong>
+								<div class="purpletree-orderreturn-desc">
+									<?php echo $message->getPtsOrderreturnMessage() ?>
+								</div>
+								<?php if($message->getPtsOrderreturnMessageAttachment()): ?>
+								<strong><?php echo __('Attachment') ?></strong>
+								<a href="<?php echo $this->getBaseUrl().'pub/media/purpletree/rma/messages/file'.$message->getPtsOrderreturnMessageAttachment(); ?>" download="<?php echo $message->getPtsOrderreturnMessageAttachment(); ?>"><?php echo __('Download File') ?></a>
+							<?php endif; ?>
+							</div>
+						</div>
+					<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
+				<?php if($orderreturn->getPtsStatusId() != 3): ?>
+				<div class="reply-form">
+				<form action="<?php echo $this->getUrl('*/*/SaveMessage') ?>" name="reply_orderreturn" id="reply_orderreturn"  method="post" enctype="multipart/form-data">
+				<?php echo $this->getBlockHtml('formkey')?>
+				<input type="hidden" name="pts_orderreturn_id" value="<?php echo $orderreturn->getPtsOrderreturnId(); ?>"/>
+				<div class="purpletree-orderreturn-ms">
+					<p><strong><?php echo __('Add Message') ?></strong> </p>
+					<p><textarea id="pts_orderreturn_message" rows="6" cols="100" name="pts_orderreturn_message"></textarea>
+					</p>
+					<br/>
+					<div class="admin__field-control orderreturnattachment control">
+						<input id="pts_orderreturn_message_attachment" name="pts_orderreturn_message_attachment" title="Attach file" class="input-file" type="file"/>   
+						<p><?php echo __('Note - File types allowed are pdf, doc, docx, xls, xlsx, csv, txt, jpg, jpeg, png, gif') ?> </p>
+					</div>
+					<br/>
+					<button id="savedata" title="Submit" type="submit" class="scalable "><span><span><span><?php echo __('Submit') ?></span></span></span></button>
+				</div>
+				</form>
+			</div>
+			<?php endif; ?>
+			</div>
+		</div>
+		<!--Prducts-->
+	<?php if(!empty($this->getProducts())) { ?>
+		<div class="cart table-wrapper">
+       <table id="shopping-cart-table" class="cart items data table">
+            <thead>
+                <tr>
+                    <th class="col item" scope="col"><span><?php echo __('Item') ?></span></th>
+                    <th class="col price" scope="col"><span><?php echo __('Price') ?></span></th>
+                    <th class="col qty" scope="col"><span><?php echo __('Returned Quantity') ?></span></th>
+                    <th class="col subtotal" scope="col"><span><?php echo __('Subtotal') ?></span></th>
+                </tr>
+            </thead>
+	<?php foreach($this->getProducts() as $item) { ?>
+	<?php $_product = $this->loadproduct($item['pts_product_id']); ?>
+			<tbody class="cart item">
+				<tr class="item-info">
+					<td data-th="Item" class="col item">
+						<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_product->getName(); ?>" tabindex="-1" class="product-item-photo">
+							<span class="product-image-container pts-img-conta">
+								<span class="product-image-wrapper">
+									<img class="product-image-photo" src="<?php echo $this->getproductimg($_product->getThumbnail()); ?>" alt="<?php echo $_product->getName(); ?>" width="120" height="120"></span>
+							</span>
+						</a>
+						<div class="product-item-details">
+							<strong class="product-item-name">
+								<a href="<?php echo $_product->getProductUrl() ?>"><?php echo $_product->getName(); ?></a>
+							</strong>
+							<?php 
+							 $options = $this->getproductfromOrder($_product->getId())->getProductOptions();
+							if(is_array($options) && isset($options['attributes_info']) && !empty($options['attributes_info'])):  ?>
+							<dl class="item-options">
+							<?php foreach($options['attributes_info'] as $attribs): ?>
+								<dt><?php echo $attribs['label'] ?></dt>
+								<dd><?php echo $attribs['value'] ?></dd>
+								<?php endforeach; ?>
+							</dl>
+							<?php endif;  ?>
+						</div>
+					</td>
+					<?php $price = $this->getproductfromOrder($_product->getId())->getPrice();?>
+					<td class="col price" data-th="Price">
+						 <span class="price-excluding-tax" data-label="Excl. Tax">
+								<span class="cart-price">
+									<span class="price"><?php echo $this->convertToCurrency($price); ?></span>           
+								 </span>
+						</span>
+					</td>
+					<td class="col qty" data-th="Qty">
+						<div class="field qty">
+							<label class="label" for="cart-<?php echo $_product->getProductId(); ?>-qty">
+								<span><?php echo __('Qty') ?></span>
+							</label>
+							<div class="control qty">
+								<label><?php echo $item['pts_product_qty']; ?></label>
+							</div>
+						</div>
+					</td>
+					<td class="col subtotal" data-th="Subtotal">
+						<span class="price-excluding-tax" data-label="Excl. Tax">
+								<span class="cart-price">
+									<span class="price"><?php echo $this->convertToCurrency($price  * $item['pts_product_qty']); ?></span>           
+								</span>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		
+	<?php } ?>
+	</table>
+     </div>
+	<?php } ?>
+	<!--Prducts-->
+	</div>
+</div>
+
+<script type="text/javascript">
+require(['jquery'], function($) { 
+
+	$(document).ready(function($) {
+		$("#savedata").click(function() {
+			if ($('#reply_orderreturn').valid()) {
+				$('.pts-front-loader').css('display','block');
+			 }
+		});
+	});
+});
+require(['jquery','mage/adminhtml/wysiwyg/tiny_mce/setup'], function(jQuery) {
+	jQuery(document).ready(function(jQuery) {
+	tinyMCE.init({
+    mode : "exact",
+    elements: "pts_orderreturn_message",
+    theme : "advanced",
+    plugins : "inlinepopups,style,layer,table,save,advhr,advlink,emotions,iespell,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
+    theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+    theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,advhr,|,print,|,ltr,rtl,|,fullscreen",
+    theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,|,visualchars,nonbreaking",
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    theme_advanced_path_location : "bottom",
+    extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
+    theme_advanced_resize_horizontal : 'true',
+    theme_advanced_resizing : 'true',
+    apply_source_formatting : 'true',
+    convert_urls : 'false',
+    force_br_newlines : 'true',
+    doctype : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+  });
+});
+});
+</script>

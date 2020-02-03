@@ -1,0 +1,345 @@
+#bluedart_shipment_creation legend {
+    display: block;
+    font-weight: bold;
+    margin-left: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.bluedart_shipment_creation_fieldset {
+/*float: left;*/
+margin-bottom: 10px;
+margin-left: 4px;
+margin-right: 2px;
+min-height: 250px;
+width: 310px;
+}
+/***************  Mass Shipment Generation ****************/
+.bluedart_mass {
+	width: 500px;
+	font-family: verdana;
+	font-size: 12px;
+	margin: 0 auto;
+	z-index: 9999;
+	opacity: 1;
+	background: #fff;
+	padding: 15px;
+	margin-top: 10px;
+    border: 1px solid #D6D6D6;
+    overflow: hidden;
+}
+
+.order_in_backgrounds{
+    position:fixed;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom:0;
+    /* Fallback for web browsers that don't support RGBa */
+    background-color: rgb(0, 0, 0);
+    /* RGBa with 0.6 opacity */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+    z-index:100000;
+}
+.bluedart_mass label {
+    display: block;
+    float: left;
+    font-size: 12px;
+    padding: 5px;
+    width: 170px;
+}
+.bluedart_mass .text_short{ padding-bottom:12px; }
+.bluedart_mass input[type="text"]{ height: 30px; }
+.bluedart_mass input[type="radio"]{ height: 15px; width: 20px; }
+.bluedart_green{ color:green; border:1px solid green;padding:5px; }
+.bluedart_red{ color:red; border:1px solid red;padding:5px; }
+.bluedart_mass label .required{color: #F00 !important;position:absolute;}
+.bluedart_mass label.error{float: right; width: 33% !important;}
+/***************  Mass Shipment Generation ****************/
+
+#bluedart_shipment_creation {
+	width: 700px;
+	font-family: verdana;
+	font-size: 12px;
+	margin: 0 auto;
+	z-index: 401;
+	display: none;
+	opacity: 1;
+	background: #fff;
+	padding: 15px;
+	margin-top: 10px;
+	overflow: auto;
+}
+
+#bluedart_shipment_creation_header {
+	margin-bottom: 20px;
+}
+
+#bluedart_shipment_creation_logo {
+	float: right;
+}
+
+#bluedart_shipment_creation_title {
+	float: left;
+	margin-left: 15px;
+	margin-top: 15px;
+}
+
+.bluedart_clearer {
+	clear: both;
+}
+
+.bluedart_shipment_creation_part {
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+#bluedart_shipment label {
+display: block;
+float: left;
+font-size: 12px;
+padding: 2px;
+width: 115px;
+}
+
+#bluedart_shipment_creation input, select{
+	padding: 2px;
+	display: block;
+	width: 180px;
+}
+
+#bluedart_shipment .text_short {
+clear: both;
+margin-bottom: 5px;
+min-height: 28px;
+width: 300px;
+}
+
+#shipment_infromation .text_short {
+	min-height: 35px;
+}
+
+#bluedart_shipment_creation .little_description {
+	font-size: 9px;
+	color: #555;
+	float: right;
+	padding-right: 20px;
+	margin-bottom: 5px;
+	margin-top: 3px;
+}
+
+#general_details {
+	 margin-bottom: -10px;
+}
+
+.bluedart_shipment_creation_fieldset_big {
+	margin-bottom: 10px;
+}
+
+#bluedart_shipment_creation_general_info {
+	background: #FFFFCC;
+}
+
+#shipment_infromation, #shipment_infromation2 {
+	border:1px solid #ccc;float:left;margin-left:4px;margin-right:2px;padding:10px 15px;width: 310px;
+}
+
+#general_details .text_short, #general_details textarea {
+	width: 300px;
+	float: left;
+	color: #000;
+}
+
+#bluedart_overlay {
+	z-index: 400;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: none;
+	top: 0;
+	left: 0;
+}
+
+#bluedart_items_table {
+	text-align: left;
+	border-collapse: collapse;
+}
+
+#bluedart_items_table th {
+	text-align: left;
+	background: #ccc;
+}
+
+#bluedart_items_table td, #bluedart_items_table th {
+border: 0 none;
+padding: 1px 15px 3px 3px;
+};
+
+#bluedart_items_table .bluedart_item_qty
+{
+	width: 20px;
+}
+
+#bluedart_items_table .bluedart_item_name
+{
+	width: 180px;
+}
+
+#bluedart_items_table .bluedart_item_options
+{
+	width: 20px;
+}
+
+#bluedart_items_table .bluedart_item_tobe_shipped {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+#bluedart_shipment label.error {
+	display: inline-block;
+	float: none;
+	margin-left: 17px;
+	padding-left: 58px;
+	width: 80%;
+}
+
+#bluedart_shipment a.error span,
+#bluedart_shipment .required,
+#bluedart_shipment .validation-advice {
+	color: #000000 !important;
+	font-weight: normal !important;
+}
+
+/*#bluedart_shipment .error { color: red !important; }*/
+
+#shipper_details textarea, #receiver_details textarea, #shipment_infromation textarea {
+	width: 190px;
+}
+
+#bluedart_shipment_creation .bluedart_input_items_qty {
+	width: 25px;
+}
+
+legend {
+    display: block !important;
+    height :initial;
+    line-height: 0;
+    margin: 0;
+    overflow: visible;
+    visibility: visible;
+    padding: 0;
+    width: auto;
+}
+#bluedart_shipment_creation fieldset, .cal-form fieldset{border: 1px solid #D6D6D6; margin-bottom: 15px; padding: 10px 15px;}
+.back-over{position:fixed; left:0; top:0;background:#000; opacity:0.7; z-index:420; display:none; width:100%; height:100%;}
+.cal-rate-part, .schedule-pickup-part{ position:absolute; display:none; z-index:500; background:#fff; height:400px; width:700px; left:calc( 50% - 350px); top:calc(50% - 200px);overflow:auto;}
+.cal-form fieldset, .pickup-form fieldset{ background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #D6D6D6;margin-bottom: 15px;padding: 10px 15px;}
+.cal-form, .pickup-form {padding:15px; }
+.fl{ float:left;}
+.fr{ float:right;}
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.cal-form legend, .pickup-form  legand{ font-size:16px;}
+.mar-10{ margin:10px 0;}
+.mar-5{ margin:5px 0;}
+.mar-30{ margin:30px 0;}
+.fields{ }
+.fields h3{ font-size:14px; }
+/*.field label span, */.red{ color:red; }
+.field input,.field select{ width:250px; height:25px;  }
+.field label{ width:100px; display:block; }
+.width-60{ width:60px !important; }
+.width-150{ width:150px !important;}
+.width-270{ width:270px;}
+.width-full{ width:519px !important}
+.mar-right-10{ margin-right:10px;}
+.mar-lf-10{ margin-left:10px;}
+.rate-result, .pickup-result{ display:none; padding:0 10px; border:1px solid #ccc; }
+.result .error, .pickup-res .error{ color:red; }
+.result .amount{ font-weight:bold; font-size:14px; }
+.calendar{ z-index:10000; left:30% !important;}
+#bluedart_shipment_creation input.radio{width:25px;float: left;}
+#bluedart_shipment_creation span{float: left;margin: 2px 0 3px;}
+#bluedart_shipment label .required{float: right;color: #F00 !important;font-weight: bold;position:absolute;}
+/*#service_pickupdate, #reg_date{background: url("../images/img.gif") no-repeat right center;border:1px solid #aaa;height:20px;border-radius:3px;cursor:pointer;}*/
+.adminhtml-sales-order-view .calendar{ left:58.5% !important;}
+label.error{ color:red; width: 19% !important; margin-left: 0; padding-left: 0; font-size: 12px;}
+#bluedart_shipment_creation input[type="text"]{height: 26px;}
+
+.hasDatepicker + .error + .ui-datepicker-trigger:after {
+     -webkit-font-smoothing: antialiased; 
+    font-size: 2.1rem;
+    line-height: 3.2rem;
+    color: #514943;
+    content: '\e627';
+    font-family: 'Admin Icons';
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+/*.hasDatepicker + .error + .ui-datepicker-trigger:after {
+    background-image: none;
+    background: none;
+    -moz-box-sizing: content-box;
+    border: 0;
+    box-shadow: none;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    text-shadow: none;
+    font-weight: 400;
+    text-decoration: none;
+    display: inline-block;
+    height: 3.2rem;
+    margin-left: -3.2rem;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: top;
+    z-index: 1;
+}*/
+.hasDatepicker + .error + .ui-datepicker-trigger:hover {
+    background: none;
+    border: none;
+}
+.hasDatepicker + .error + .ui-datepicker-trigger {
+    background-image: none;
+    background: none;
+    -moz-box-sizing: content-box;
+    border: 0;
+    box-shadow: none;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    text-shadow: none;
+    font-weight: 400;
+    text-decoration: none;
+    display: inline-block;
+    height: 3.2rem;
+    margin-left: -3.2rem;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: top;
+    z-index: 1;
+}
+.hasDatepicker + .error + .ui-datepicker-trigger > span {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}

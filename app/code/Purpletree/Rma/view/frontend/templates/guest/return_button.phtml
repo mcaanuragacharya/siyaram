@@ -1,0 +1,37 @@
+<?php
+/**
+ * Purpletree_Rma return_button
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+?>
+<span class="order-status"><?php /* @escapeNotVerified */ echo $block->getOrder()->getStatusLabel() ?></span>
+<?php 
+$objectManager  = \Magento\Framework\App\ObjectManager::getInstance();
+$data_helper 	= $objectManager->create('Purpletree\Rma\Helper\Data');
+$isEnabled 		= $data_helper->isEnabled();
+	if($isEnabled) {
+		$order 		= $block->getOrder();
+		$_orderreturn   = $objectManager->create('Purpletree\Rma\Model\ResourceModel\Orderreturn');
+		$entityId = $_orderreturn->getOrderreturnIdByOrderId($order->getRealOrderId());
+			if(!$entityId) {
+				if($order->getState() == 'complete') {
+?>
+<form method="POST" class="return-order-form" name="return-order" action="<?php echo $this->getUrl('rma/index/InitiateGuest'); ?>">
+<input type="hidden" name="order_id" value="<?php echo $block->getOrder()->getRealOrderId(); ?>"/>
+<input type="hidden" name="email_id" value="<?php echo $block->getOrder()->getBillingAddress()->getEmail(); ?>"/>
+<button type="submit"><?php echo __('Return'); ?></button>
+</form>
+	<?php } } else { ?>
+						<a class="returnstatusbtn" href="<?php echo $this->getUrl('rma/index/viewguest', ['id' => $entityId,'email_id' => $block->getOrder()->getBillingAddress()->getEmail()]); ?>" class="action view">
+							<span><?php echo __('Return Status') ?></span>
+						</a>
+	<?php } } ?>

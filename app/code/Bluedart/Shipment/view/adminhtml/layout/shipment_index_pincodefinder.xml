@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+   <update handle="editor"/>
+    <body>
+    	<!-- <head>
+			<link src="Bluedart_Shipment::js/jquery-1.10.2.min.js" />
+			<link src="Bluedart_Shipment::js/jquery.validate.min.js" />
+			<css src="Bluedart_Shipment::css/bluedart.css"/>
+     	</head> -->
+        <referenceContainer name="content">
+            <block class="Bluedart\Shipment\Block\Adminhtml\Pincodefinder" name="pincodefinder" template="Bluedart_Shipment::pincodefinder.phtml" />
+        </referenceContainer>
+    </body>
+</page>

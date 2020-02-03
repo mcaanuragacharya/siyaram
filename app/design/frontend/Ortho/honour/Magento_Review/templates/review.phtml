@@ -1,0 +1,106 @@
+<?php
+/**
+ * Copyright Â© 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+ <?php echo $block->getChildHtml(); ?> 
+<div id="product-review-container" data-role="product-review"></div>
+<?php echo $this->getChildHtml('product_additional_data') ?>
+ <?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @description:
+ *
+ */
+?>
+<?php
+
+ $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();  
+ $registry = $objectManager->get('\Magento\Framework\Registry');
+ 
+$currentCategory = $registry->registry('current_category');
+$currentProduct = $registry->registry('current_product');
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$product = $objectManager->create("Magento\Catalog\Model\Product")->loadByAttribute('sku', $currentProduct->getSku()); //you can also use load($id) if you know product id
+$rating = $objectManager->get("Magento\Review\Model\ResourceModel\Review\CollectionFactory");
+$_items = $rating->create()
+        ->addStatusFilter(
+            \Magento\Review\Model\Review::STATUS_APPROVED
+        )->addEntityFilter(
+            'product',
+            $product->getId()
+        )->setDateOrder();
+    
+    $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+?>
+<?php if (count($_items)):?>
+<div class="block review-list" id="customer-reviews">
+    <div class="block-title">
+        <strong><?php /* @escapeNotVerified */ echo __('Customer Reviews') ?></strong>
+    </div>
+    <div class="block-content">
+        <div class="toolbar review-toolbar">
+            <?php echo $block->getChildHtml('toolbar') ?>
+        </div>
+        <ol class="items review-items">
+        <?php foreach ($_items as $_review):?>
+            <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+                <div class="review-title" itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
+                <?php if (count($_review->getRatingVotes())): ?>
+                    <div class="review-ratings">
+                    <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                    <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                        <span class="label rating-label"><span><?php echo $block->escapeHtml($_vote->getRatingCode()) ?></span></span>
+                        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+                            <meta itemprop="worstRating" content = "1"/>
+                            <meta itemprop="bestRating" content = "100"/>
+                            <span style="width:<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+                                <span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%</span>
+                            </span>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                <div class="review-content" itemprop="description">
+                    <?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
+                </div>
+                <div class="review-details">
+                    <p class="review-author">
+                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Review by')?></span>
+                        <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
+                    </p>
+                    <p class="review-date">
+                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Posted on') ?></span>
+                        <time class="review-details-value" itemprop="datePublished" datetime="<?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+                    </p>
+                </div>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+        <div class="toolbar review-toolbar">
+            <?php echo $block->getChildHtml('toolbar') ?>
+        </div>
+    </div>
+</div>
+<?php endif;?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Review/js/process-reviews": {
+                "productReviewUrl": "<?php /* @escapeNotVerified */ echo $block->getProductReviewUrl();?>"
+            }
+        }
+    }
+</script>

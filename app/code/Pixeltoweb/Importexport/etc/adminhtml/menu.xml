@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Pixeltoweb_Importexport::im" title="Import Export" module="Pixeltoweb_Importexport" sortOrder="10" resource="Pixeltoweb_Importexport::im"/>
+        <add id="Pixeltoweb_Importexport::importexport" title="Manager Import Export" module="Pixeltoweb_Importexport" sortOrder="0" parent="Pixeltoweb_Importexport::im"
+                action="importexport/importexport" resource="Pixeltoweb_Importexport::importexport"/>
+    </menu>
+</config>

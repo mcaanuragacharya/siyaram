@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma acl
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Purpletree_Rma::purpletree_return" title="Returns" sortOrder="40">
+					<resource id="Purpletree_Rma::orderreturn" title="Manage Order Returns" sortOrder="10" />
+					<resource id="Purpletree_Rma::resolution" title="Resolution" sortOrder="20" />
+					<resource id="Purpletree_Rma::packagecondition" title="Package condition" sortOrder="30" />
+					<resource id="Purpletree_Rma::status" title="Status" sortOrder="40" />
+					<resource id="Purpletree_Rma::reason" title="Reason" sortOrder="50" />
+                </resource>
+				<resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Purpletree_Rma::purpletree_return_configuration" title="Return Configuration" sortOrder="60" /> 
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

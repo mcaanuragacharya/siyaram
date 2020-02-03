@@ -1,0 +1,150 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Ortho\Theme\Block\category\Leftcategory;
+ */
+?>
+<?php /*?><?php
+$categories = $this->getStoreCategories(true,false,true);
+$categoryHelper = $this->getCategoryHelper();
+?>
+<ul>
+<?php
+foreach($categories as $category):
+     if (!$category->getIsActive()) {
+        continue;
+     }
+?>
+<li><a href="<?php echo $categoryHelper->getCategoryUrl($category) ?>"><?php echo $category->getName() ?></a></li>
+<?php  
+if($childrenCategories = $this->getChildCategories($category)):
+?>
+<ul>
+<?php
+foreach($childrenCategories as $childrenCategory):
+     if (!$childrenCategory->getIsActive()) {
+        continue;
+     }
+?>
+<li><a href="<?php echo $categoryHelper->getCategoryUrl($childrenCategory) ?>"><?php echo $childrenCategory->getName() ?></a></li>
+<?php
+endforeach;
+?>
+</ul>
+<?php
+endif;
+endforeach;
+?>
+</ul><?php */ 
+
+/* ?>
+
+<div class="block block-side-nav">
+	
+	<div class="block-title">
+		<strong>
+			<?php echo __('Categories');?>
+		</strong>
+	</div>
+	<div class="block-content">
+		<ul id="sidetree">
+		<?php echo $this->getHtml() ?>
+		</ul>
+	</div>
+
+</div>
+<?php 
+
+$_loggedin = $this->helper('Magento\Checkout\Helper\Cart')->getCart()->getCustomerSession()->isLoggedIn();
+if($_loggedin) 
+{
+?>
+<div class="block block-side-nav" >
+    <div class="block-title" >
+        <strong>
+            <?php echo __('My Account');?>
+        </strong>
+    </div>
+    <div class="block-content ">
+        <ul id="sidetree nav items">
+            <li class="item">
+                <a href="<?php echo $this->getBaseUrl().'customer/account/';?>"><span class="seperator-sidetree"> - </span>Account Dashboard</a>
+            </li>
+            <li>
+                <a href="<?php echo $this->getBaseUrl().'customer/address/';?>"><span class="seperator-sidetree"> - </span>Addresses</a>
+            </li>
+            <li>
+                <a href="<?php echo $this->getBaseUrl().'vault/cards/listaction/';?>"><span class="seperator-sidetree"> - </span>Payment Settings</a>
+            </li>
+            <li>
+                <a href="<?php echo $this->getBaseUrl().'newsletter/manage/';?>"><span class="seperator-sidetree"> - </span>Newsletter Subscriptions</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="block block-side-nav" >
+    <div class="block-title" >
+        <strong>
+            <?php echo __('Order Information');?>
+        </strong>
+    </div>
+    <div class="block-content ">
+        <ul id="sidetree nav items">
+            <li class="item">
+                <a href="<?php echo $this->getBaseUrl().'sales/order/history/';?>"><span class="seperator-sidetree"> - </span>My Orders</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="block block-side-nav" >
+    <div class="block-title" >
+        <strong>
+            <?php echo __('Wish List');?>
+        </strong>
+    </div>
+    <div class="block-content ">
+        <ul id="sidetree nav items">
+            <li class="item">
+                <a href="<?php echo $this->getBaseUrl().'wishlist/';?>"><span class="seperator-sidetree"> - </span>View Wish List</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="block block-side-nav" >
+    <div class="block-title" >
+        <strong>
+            <?php echo __('Product Reviews');?>
+        </strong>
+    </div>
+    <div class="block-content ">
+        <ul id="sidetree nav items">
+            <li class="item">
+                <a href="<?php echo $this->getBaseUrl().'review/customer/';?>"><span class="seperator-sidetree"> - </span>My Product Reviews</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<style type="">
+.account-nav {
+    display: none;
+}
+.block-side-nav {
+    border:1px solid #ccc;
+}
+.block-title {
+    border-bottom:1px solid #ccc;
+}
+.seperator-sidetree {
+    font-weight: bold;
+}
+</style>
+<?php } */?>

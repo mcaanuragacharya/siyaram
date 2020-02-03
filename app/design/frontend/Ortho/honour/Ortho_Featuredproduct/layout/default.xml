@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+		<!--<script src="Ortho_Featuredproduct::js/jquery-1.12.2.js"/>
+		<script src="Ortho_Featuredproduct::js/owl.carousel.js"/>
+		<script src="Ortho_Featuredproduct::js/custom.js"/>
+        <css src="Ortho_Featuredproduct::css/owl.carousel.css"/>-->
+		<css src="Magento_Swatches::css/swatches.css"/>
+    </head>
+    <body>	
+        
+		
+	
+        <referenceBlock name="category.product.type.details.renderers">
+            <block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable" as="configurable" template="Magento_Swatches::product/listing/renderer.phtml" />
+        </referenceBlock>
+   
+		
+		<referenceContainer name="sidebar.additional">
+			<block class="Ortho\Featuredproduct\Block\Sidebar" name="featured_left" template="Ortho_Featuredproduct::sidebar_list.phtml" after="-" />
+		</referenceContainer>
+		<referenceContainer name="after.body.start">			
+            <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Ortho_Featuredproduct::js/components.phtml"/>
+        </referenceContainer>
+		
+    </body>
+</page>

@@ -1,0 +1,127 @@
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('Bluedart_Shipment::js/jquery.validate.min.js'); ?>"></script>
+<script type="text/javascript">
+jQuery.noConflict();
+  jQuery(document).ready(function() {
+    jQuery.validator.addMethod("lettersonly", function(value, element) {
+      return this.optional(element) || /^[a-z]+$/i.test(value);
+    }, "Please enter valid alphabets only."); 
+
+    jQuery.validator.addMethod("time", function(value, element) {  
+      return this.optional(element) || /^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])?$/i.test(value);}, "Please enter a valid time.");
+
+  jQuery("#shipmenttransit").validate({
+    rules: {
+      pPinCodeFrom: {required : true,minlength: 6,number: true},
+      pPinCodeTo: {required : true,minlength: 6,number: true},
+      pProductCode:  {required : true,lettersonly: true},
+      pSubProductCode:  {lettersonly: true},
+      pPudate: {required : true,date: true},
+      pPickupTime: {required : true,time: true},    
+    },
+  });
+});
+jQuery.validator.setDefaults({
+    submitHandler: function() {
+      jQuery('#transitdetails').hide();
+      jQuery('#ajax-loader').show();
+      jQuery.ajax({
+        type: "POST",
+        url: "<?php echo $this->getUrl('shipment/index/shipmenttransitvalidate'); ?>",
+        data: { 'pPinCodeFrom' : jQuery('#pPinCodeFrom').val(),'pPinCodeTo' : jQuery('#pPinCodeTo').val(),'pProductCode' : jQuery('#pProductCode').val(),'pSubProductCode' : jQuery('#pSubProductCode').val(),'pPudate' : jQuery('#pPudate').val(),'pPickupTime' : jQuery('#pPickupTime').val() },
+        success: function(data){
+          if(data != ''){
+            jQuery('#ajax-loader').hide();
+            jQuery('#transitdetails').show();
+            jQuery('#transitdetails').html(data);
+          }
+        }
+      });
+    }
+  });
+</script>
+<script>
+  require([
+      "jquery",
+      "mage/calendar"
+  ], function($){
+     $("#pPudate").calendar({
+        buttonText:"Select",
+        dateFormat: "Y-M-d",
+        closeText: "Done",
+        selectOtherMonths: true
+     });
+  });
+
+function resetForm() {
+  jQuery('#transitdetails').html('');
+  jQuery("#shipmenttransit").validate().resetForm();
+}
+</script>
+<form name ="shipmenttransit" id = "shipmenttransit" novalidate="novalidate">
+<div class="pincode">
+<h3>Transit Time Finder :</h3>
+<span>Origin Pincode </span><span class="required">*</span>:&nbsp;&nbsp;<input maxlength="6" size="7" type="text" name="pPinCodeFrom" id="pPinCodeFrom" /><br/>
+<span>Destination Pincode </span><span class="required">*</span>:&nbsp;&nbsp;<input maxlength="6" size="7" type="text" name="pPinCodeTo" id="pPinCodeTo"/><br/>
+<span>Product Code </span><span class="required">*</span>:&nbsp;&nbsp;<input size="2"  maxlength="1" type="text" name="pProductCode" id="pProductCode" style="text-transform: uppercase;"/><br/>
+<span>Sub Product Code</span><span class="required"></span>:&nbsp;&nbsp;<input size="2" maxlength="1" type="text" name="pSubProductCode" id="pSubProductCode" style="text-transform: uppercase;"/><br/>
+<span>Pickup Date </span><span class="required">*</span>:&nbsp;&nbsp;<input type="text" size="11" maxlength="10" name="pPudate" id="pPudate"/><br/>
+<span>Pickup Time </span><span class="required">*</span>:&nbsp;&nbsp;<input type="text" size="4" maxlength="5" name="pPickupTime" id="pPickupTime"/>&nbsp;&nbsp;Format 23:59<br/>
+<button type="submit" class="go_button1">GO</button>
+<button class="go_button" type="button" onclick="reset();resetForm();">Reset</button><br/>
+<div id="ajax-loader" style="display:none;margin:2% 0 0 15%;">
+  <img src="<?php echo $this->getViewFileUrl('Bluedart_Shipment::images/ajax-loader.gif'); ?>">
+</div>
+<div id="transitdetails"></div>
+</div>  
+</form>
+
+<style type="text/css">
+.divTable
+{
+    display:  table;
+    width:auto;
+    background-color:#eee;
+    border:1px solid  #666666;
+    border-spacing:5px;margin:10px 0 0;/*cellspacing:poor IE support for  this*/
+   /* border-collapse:separate;*/
+   width: 49%;
+}
+
+.divRow
+{
+   display:table-row;
+   width:auto;
+}
+
+.divCell
+{
+    float:left;/*fix for  buggy browsers*/
+    display:table-column;
+    width:200px;
+    background-color:#ccc;
+}
+.pincode, .pincodes{width: 100%;}
+.pincode span, .pincodes span{
+  width: 14%;
+  float: left;
+  display: block;
+  margin: 5px 0px 0px 0;
+  text-align: right;
+}
+#transitdetails .pincode span, #transitdetails .pincodes span{width:49%;}
+.pincodes span{height: 24px; text-align: left; margin: 5px 0 0 5px;}
+.pincodes p{overflow: auto;margin: 0;}
+.pincode input{margin: 5px 10px 5px 0;}
+.pincode .go_button{margin: 0 0 0 10.8%;}
+.pincodes p:nth-child(odd) {
+  background: #FEFEFE;}
+.pincodes p:nth-child(even) {
+  background: #CDE0F1;}
+.pincodes p:nth-child(1) {background: #0F6FC6;color:#FEFEFE;}
+.pincode .go_button1{margin: 0 0 0 16%;}
+.pincode .go_button{margin: 0 0 0 1%;}
+#pPudate{background: url("<?php echo $this->getViewFileUrl('Bluedart_Shipment::images/img.gif'); ?>") no-repeat right center;border:1px solid #aaa;height:26px;border-radius:1px;cursor:pointer;width: 11%;}
+.pincode span.required{color:#F00;float:left;margin:7px 10px 0 2px;font-weight: bold;width:0.5%;}
+.pincodes span.error_msg{font-weight: bold;color: #D40707;}
+.pincode label.error { margin: 9px 0px 0px 0; width: 70% !important; float: right; }
+</style>

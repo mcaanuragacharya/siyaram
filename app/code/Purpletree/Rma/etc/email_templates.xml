@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Purpletree_Rma email_templates
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Purpletree License that is bundled with this package in the file license.txt.
+ * It is also available through online at this URL: https://www.purpletreesoftware.com/license.html
+ *
+ * @category    Purpletree
+ * @package     Purpletree_Rma
+ * @author      Purpletree Software
+ * @copyright   Copyright (c) 2017
+ * @license     https://www.purpletreesoftware.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="status_change_email" label="Status Change Email" file="status_change_email.html" type="html" module="Purpletree_Rma" area="adminhtml"/> 
+	<template id="customer_message_email" label="Message Email to Customer" file="customer_message_email.html" type="html" module="Purpletree_Rma" area="adminhtml"/> 
+	<template id="customer_initiate_email" label="Order Return Acknowledge to Customer" file="customer_initiate_email.html" type="html" module="Purpletree_Rma" area="frontend"/> 
+	<template id="admin_message_email" label="Message Email to Admin" file="admin_message_email.html" type="html" module="Purpletree_Rma" area="frontend"/> 
+	<template id="admin_initiate_email" label="Initiate Email to Admin" file="admin_initiate_email.html" type="html" module="Purpletree_Rma" area="frontend"/> 
+</config>

@@ -1,0 +1,165 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div id="checkout" data-bind="scope:'checkout'" class="checkout-container">
+    <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"checkoutLoader": {}}'>
+        <div class="loader">
+            <img src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>"
+                 alt="<?= /* @escapeNotVerified */ __('Loading...') ?>"
+                 style="position: absolute;">
+        </div>
+    </div>
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+            }
+        }
+    </script>
+    <script>
+        window.checkoutConfig = <?= /* @escapeNotVerified */ $block->getSerializedCheckoutConfig() ?>;
+        // Create aliases for customer.js model from customer module
+        window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+        window.customerData = window.checkoutConfig.customerData;
+    </script>
+    <script>
+        require([
+            'mage/url',
+            'Magento_Ui/js/block-loader'
+        ], function(url, blockLoader) {
+            blockLoader("<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>");
+            return url.setBaseUrl('<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>');
+        })
+    </script>
+</div>
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+if(!$customerSession->isLoggedIn()) { ?>
+
+<script type="text/javascript">
+    require(['jquery', 'jquery/ui'], function($){ 
+        (function stateLoopss() {
+           setTimeout(function () {
+           if(jQuery("div[name='shippingAddress.firstname']").length && jQuery("div[name='shippingAddress.lastname']").length && jQuery("div[name='shippingAddress.city']").length && jQuery("div[name='shippingAddress.region_id']").length && jQuery("div[name='shippingAddress.postcode']").length && jQuery("div[name='shippingAddress.country_id']").length && jQuery("div[name='shippingAddress.telephone']").length){
+                jQuery("<div class='actions'><div class='primary'><a href='http://eshop.oxemberg.com/customer/account/login/'><button id='' type='button' class='' title='Login to Continue' style='width: 100%;'>Login to Continue</button></a></div></div><div class='actions' style='margin-top:10px;margin-bottom: 10px;'><div class='primary'><a href='http://eshop.oxemberg.com/customer/account/'><button id='' type='button' class='' title='Sign up to Place Order' style='width: 100%;'>Sign up to Place Order</button></a></div></div>").insertBefore(".opc-block-shipping-information");    
+            }else{
+            stateLoopss()
+       }
+      },500);
+    }());
+ });
+</script>       
+<?php } ?>
+
+<script type="text/javascript">
+require(['jquery', 'jquery/ui'], function($){ 
+    (function stateLoopss() {
+       setTimeout(function () {
+       if(jQuery("div[name='shippingAddress.firstname']").length && jQuery("div[name='shippingAddress.lastname']").length && jQuery("div[name='shippingAddress.city']").length && jQuery("div[name='shippingAddress.region_id']").length && jQuery("div[name='shippingAddress.postcode']").length && jQuery("div[name='shippingAddress.country_id']").length && jQuery("div[name='shippingAddress.telephone']").length){
+
+            jQuery("div[name='shippingAddress.firstname']").addClass('firstname');
+            jQuery("div[name='shippingAddress.lastname']").addClass('lastname');
+            jQuery("div[name='shippingAddress.city']").addClass('city');
+            jQuery("div[name='shippingAddress.region_id']").addClass('region_id');
+            jQuery("div[name='shippingAddress.postcode']").addClass('postcode');
+            jQuery("div[name='shippingAddress.country_id']").addClass('country_id');
+            jQuery("div[name='shippingAddress.telephone']").addClass('telephone');
+            jQuery(".field.street span").text("Shipping Address")
+            jQuery(".firstname label").hide();
+            jQuery(".lastname label").hide();
+            jQuery(".city label").hide();
+            jQuery(".region_id label").hide();
+            jQuery(".postcode label").hide();
+            jQuery(".country_id label").hide();
+            jQuery(".telephone label").hide();
+            jQuery("<legend class='label'><span>Personal Information</span></legend>").insertBefore(".firstname");
+            
+       }else{
+            stateLoopss()
+       }
+      },500);
+    }());
+ });
+</script>
+
+<style type="text/css">
+    #co-shipping-form {
+        max-width: 100% !important;
+    }
+    #shipping-new-address-form .firstname, #shipping-new-address-form .city, #shipping-new-address-form .postcode{
+        float: left;
+        width: 49%;
+    }
+    #shipping-new-address-form .lastname, #shipping-new-address-form .region_id, #shipping-new-address-form .country_id{
+        float: right;
+        width: 49%;
+    }
+    .opc-progress-bar{
+        margin: 60px 0px 20px 20px !important;
+    }
+    #shipping-new-address-form .field.street{
+        float: left;
+        width: 100%
+    }
+    .field.street .field.additional{
+        float: right !important;
+        width: 49% !important;
+    }
+    .field.street .field._required{
+        width: 49% !important;
+        margin-right: 0 !important;
+    }
+    .opc-wrapper .form-login, .opc-wrapper .form-shipping-address{
+        margin-top: 0px !important;
+        max-width: 100% !important;
+        margin-bottom: 0px !important;
+    }
+    /*#shipping-method-buttons-container {
+        margin-top: 48px;
+    }*/
+    .field-tooltip .field-tooltip-action:before{
+        margin-top: -10px;
+    }
+    .opc-wrapper .form-login {
+        padding-bottom: 0px !important;
+        border-bottom: 0px  solid #ffffff;
+    }
+    .form.form-shipping-address .field .field-tooltip{
+        top: 228px !important;
+    }
+    .form.form-shipping-address .field-tooltip.toggle{
+        position: initial;
+        float: right;
+        margin-top: 5px;
+    }
+
+    element.style{
+    position: absolute;
+        left: 62.5%;
+        top: 535px;
+    }
+    .field .control._with-tooltip {
+        position: static;
+    }
+
+    #checkout-step-shipping .form.form-login .field .field-tooltip {top: 234px;right: 37%;}
+
+    @media only screen and (max-width: 1199px){
+    #checkout-step-shipping .form.form-login .field .field-tooltip {top: 245px;left: 60%;}
+    }
+    @media only screen and (max-width: 992px){
+    #checkout-step-shipping .form.form-login .field .field-tooltip {top: 245px;left: 60%;}
+    }
+    @media only screen and (max-width: 768px){
+    #checkout-step-shipping .form.form-login .field .field-tooltip {top: 245px;left: 83%;}
+    }
+
+</style>
